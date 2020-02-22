@@ -72,14 +72,14 @@ private:
 
 auto plot(Page& page, char c, double (*f)(double)) -> void
 {
-  for (int x = 0; x < page.width(); ++x)
+  for (unsigned x = 0; x < page.width(); ++x)
   {
     double x_offset = std::floor(page.width() / 2);
     double fx = (x - x_offset) / resolution;
     double fy = f(fx);
     double y_offset = std::floor(page.height() / 2);
-    int y = static_cast<int>((fy * resolution) * -1 + y_offset);
-    if (y >= 0 && y < page.height())
+    unsigned y = static_cast<unsigned>((fy * resolution) * -1 + y_offset);
+    if (y < page.height())
     {
       page.setchar(y, x, c);
     }
@@ -94,14 +94,14 @@ public:
 
 void plot(Page& page, char c, FunctionCall const& f)
 {
-  for (int x = 0; x < page.width(); ++x)
+  for (unsigned x = 0; x < page.width(); ++x)
   {
     double x_offset = std::floor(page.width() / 2);
     double fx = (x - x_offset) / resolution;
     double fy = f(fx);
     double y_offset = std::floor(page.height() / 2);
-    int y = static_cast<int>((fy * resolution) * -1 + y_offset);
-    if (y >= 0 && y < page.height())
+    unsigned y = static_cast<unsigned>((fy * resolution) * -1 + y_offset);
+    if (y < page.height())
     {
       page.setchar(y, x, c);
     }
