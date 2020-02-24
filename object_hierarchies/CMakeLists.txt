@@ -8,3 +8,6 @@ endif()
 if ( MSVC )
     target_compile_options( PRIVATE "/W4")
 endif()
+
+add_executable(reverse_polish_notation reverse_polish_notation.cpp)
+target_compile_features(reverse_polish_notation PRIVATE cxx_std_17)
