@@ -6,7 +6,7 @@ if ( CMAKE_COMPILER_IS_GNUCC )
     target_compile_options(sieve_of_eratosthenes PRIVATE -Wall -Wextra)
 endif()
 if ( MSVC )
-    target_compile_options( PRIVATE "/W4")
+    target_compile_options( PRIVATE /W4)
 endif()
 
 add_executable(reverse_polish_notation reverse_polish_notation.cpp)
