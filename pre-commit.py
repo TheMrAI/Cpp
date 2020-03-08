@@ -11,3 +11,4 @@ for file_path in git_diff.stdout.splitlines():
         continue
     clang_format_command_parameters[3] = file_path
     subprocess.run(clang_format_command_parameters)
+    subprocess.run(['git', 'add', file_path])
