@@ -31,7 +31,7 @@ void plot_with_d(int H, int W, char page[H][W], char c,
 {
   for (int x = 0; x < W; ++x)
   {
-    double fx = (x - W / 2) / 4.0;
+    //double fx = (x - W / 2) / 4.0;
     double fy = f(x, d);
     int y = (fy * 4.0) + H / 2;
     if (y >= 0 && y < H)
