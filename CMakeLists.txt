@@ -23,3 +23,6 @@ add_subdirectory(object_hierarchies) # lab 2
 # lab 3
 # lab 4
 add_subdirectory(lifetime_and_smart_pointers) # lab 5
+
+# Containers
+add_subdirectory(linked_list)
