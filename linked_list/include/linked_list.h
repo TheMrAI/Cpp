@@ -1,8 +1,8 @@
 #ifndef LINKED_LIST
 #define LINKED_LIST
 
-#include <iostream>
 #include <memory>
+#include <utility>
 
 namespace mrai
 {
@@ -87,7 +87,7 @@ auto linked_list<T>::push_back(const T& value) -> void
 template <typename T>
 auto linked_list<T>::push_back(T&& value) -> void
 {
-  auto next_node = std::make_unique<list_node>(std::move(value));
+  auto next_node = std::make_unique<list_node>(std::forward<T>(value));
   if (empty())
   {
     head_ = std::move(next_node);
@@ -113,7 +113,7 @@ auto linked_list<T>::push_front(const T& value) -> void
 template <typename T>
 auto linked_list<T>::push_front(T&& value) -> void
 {
-  auto previous_node = std::make_unique<list_node>(std::move(value));
+  auto previous_node = std::make_unique<list_node>(std::forward<T>(value));
   if (empty())
   {
     head_ = std::move(previous_node);
