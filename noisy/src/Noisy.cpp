@@ -24,38 +24,38 @@ Noisy::Noisy(Noisy&&) noexcept
   std::cout << "Noisy move\n";
 }
 
-Noisy& Noisy::operator=(Noisy const&)
+auto Noisy::operator=(Noisy const&) -> Noisy&
 {
   std::cout << "Noisy assignment\n";
   return *this;
 }
 
-Noisy& Noisy::operator=(Noisy&&)
+auto Noisy::operator=(Noisy &&) -> Noisy&
 {
   std::cout << "Noisy move assignement\n";
   return *this;
 }
 
-Noisy create_noisy_on_return()
+auto create_noisy_on_return() -> Noisy
 {
   return Noisy();
 }
 
-Noisy create_noisy_from_local()
+auto create_noisy_from_local() -> Noisy
 {
   Noisy y;
   return y;
 }
 
-void do_something_with_noisy_cref(Noisy const)
+auto do_something_with_noisy_cref(Noisy const&) -> void
 {
 }
 
-void do_something_with_noisy_value(Noisy)
+auto do_something_with_noisy_value(Noisy) -> void
 {
 }
 
-void do_something_with_noisy_rref(Noisy&&)
+auto do_something_with_noisy_rref(Noisy &&) -> void
 {
 }
 
