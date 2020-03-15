@@ -20,11 +20,14 @@ endfunction()
 
 add_subdirectory(../googletest ./build/) # googletest
 
+add_subdirectory(noisy)
+
 add_subdirectory(object_orientation) # lab 1
 add_subdirectory(object_hierarchies) # lab 2
 # lab 3
 # lab 4
 add_subdirectory(lifetime_and_smart_pointers) # lab 5
+# add_subdirectory(rvalue_references) # lab 6
 
 # Containers
 add_subdirectory(linked_list)
