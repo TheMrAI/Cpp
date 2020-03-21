@@ -20,67 +20,38 @@ public:
   ~linked_list();
   */
 
-  [[nodiscard]] auto front() -> T&
-  {
-    return head_->data;
-  }
-
-  [[nodiscard]] auto front() const -> const T&
-  {
-    return head_->data;
-  }
-
-  [[nodiscard]] auto back() -> T&
-  {
-    return last_->previous->data;
-  }
-
-  [[nodiscard]] auto back() const -> const T&
-  {
-    return last_->previous->data;
-  }
-
-  [[nodiscard]] auto size() const noexcept -> size_t
-  {
-    return size_;
-  }
-
-  [[nodiscard]] auto empty() const noexcept -> bool
-  {
-    return size_ == 0;
-  }
+  [[nodiscard]] auto front() -> T&;
+  [[nodiscard]] auto front() const -> const T&;
+  [[nodiscard]] auto back() -> T&;
+  [[nodiscard]] auto back() const -> const T&;
+  [[nodiscard]] auto size() const noexcept -> size_t;
+  [[nodiscard]] auto empty() const noexcept -> bool;
 
   auto push_back(const T& value) -> void;
   auto push_back(T&& value) -> void;
   auto push_front(const T& value) -> void;
   auto push_front(T&& value) -> void;
 
+private:
   struct list_node
   {
     T data;
     std::unique_ptr<list_node> next;
     list_node* previous;
 
-    explicit list_node(const T& value)
-        : data{ value }, next{ nullptr }, previous{ nullptr }
-    {
-    }
+    explicit list_node(const T& value);
     ~list_node() = default;
     list_node(list_node const& rhs) = delete;
-    list_node(list_node&& rhs)
-    {
-      *this = rhs;
-    }
+    list_node(list_node&& rhs);
     list_node& operator=(list_node const&) = delete;
-    list_node& operator=(list_node&& rhs)
-    {
-      std::swap(this->data, rhs.data);
-      std::swap(this->next, rhs.next);
-      std::swap(this->previous, rhs.previous);
-      return *this;
-    }
+    list_node& operator=(list_node&& rhs);
   };
 
+  std::unique_ptr<list_node> head_;
+  list_node* last_;
+  size_t size_;
+
+public:
   class iterator
   {
   public:
@@ -90,7 +61,7 @@ public:
     using value_type = T;
     using difference_type = void;
 
-    iterator(list_node* element);
+    iterator(list_node* element = nullptr);
     /*iterator(iterator const & rhs);
     iterator(iterator&& rhs);
     iterator& operator++(); // pre increment
@@ -111,16 +82,47 @@ public:
   auto end() -> iterator;
   /*auto cbegin() -> const_iterator;
   auto cend() -> const_iterator;*/
-
-private:
-  std::unique_ptr<list_node> head_;
-  list_node* last_;
-  size_t size_;
 };
 
 template <typename T>
 linked_list<T>::linked_list(): head_{ nullptr }, last_{ nullptr }, size_{ 0 }
 {
+}
+
+template <typename T>
+[[nodiscard]] auto linked_list<T>::front() -> T&
+{
+  return head_->data;
+}
+
+template <typename T>
+[[nodiscard]] auto linked_list<T>::front() const -> const T&
+{
+  return head_->data;
+}
+
+template <typename T>
+[[nodiscard]] auto linked_list<T>::back() -> T&
+{
+  return last_->previous->data;
+}
+
+template <typename T>
+[[nodiscard]] auto linked_list<T>::back() const -> const T&
+{
+  return last_->previous->data;
+}
+
+template <typename T>
+[[nodiscard]] auto linked_list<T>::size() const noexcept -> size_t
+{
+  return size_;
+}
+
+template <typename T>
+[[nodiscard]] auto linked_list<T>::empty() const noexcept -> bool
+{
+  return size_ == 0;
 }
 
 template <typename T>
@@ -196,6 +198,28 @@ template <typename T>
 auto linked_list<T>::end() -> linked_list<T>::iterator
 {
   return linked_list<T>::iterator(last_);
+}
+
+template <typename T>
+linked_list<T>::list_node::list_node(const T& value)
+    : data{ value }, next{ nullptr }, previous{ nullptr }
+{
+}
+
+template <typename T>
+linked_list<T>::list_node::list_node(linked_list<T>::list_node&& rhs)
+{
+  *this = std::move(rhs);
+}
+
+template <typename T>
+auto linked_list<T>::list_node::operator=(list_node&& rhs)
+    -> linked_list<T>::list_node&
+{
+  std::swap(this->data, rhs.data);
+  std::swap(this->next, rhs.next);
+  std::swap(this->previous, rhs.previous);
+  return *this;
 }
 
 }  // namespace mrai
