@@ -28,9 +28,9 @@ public:
   [[nodiscard]] auto size() const noexcept -> size_t;
   [[nodiscard]] auto empty() const noexcept -> bool;
 
-  auto push_back(const T& value) -> void;
+  auto push_back(T const& value) -> void;
   auto push_back(T&& value) -> void;
-  auto push_front(const T& value) -> void;
+  auto push_front(T const& value) -> void;
   auto push_front(T&& value) -> void;
 
 private:
@@ -40,12 +40,12 @@ private:
     std::unique_ptr<list_node> next;
     list_node* previous;
 
-    explicit list_node(const T& value);
+    explicit list_node(T const& value);
     ~list_node() = default;
     list_node(list_node const& rhs) = delete;
-    list_node(list_node&& rhs);
-    list_node& operator=(list_node const&) = delete;
-    list_node& operator=(list_node&& rhs);
+    list_node(list_node&& rhs) noexcept;
+    auto operator=(list_node const&) -> list_node& = delete;
+    auto operator=(list_node&& rhs) noexcept -> list_node&;
   };
 
   std::unique_ptr<list_node> head_;
@@ -62,7 +62,7 @@ public:
     using value_type = T;
     using difference_type = void;
 
-    iterator(list_node* element = nullptr);
+    explicit iterator(list_node* element = nullptr);
     /*iterator(iterator const & rhs);
     iterator(iterator&& rhs);
     iterator& operator++(); // pre increment
@@ -131,7 +131,7 @@ template <typename T>
 }
 
 template <typename T>
-auto linked_list<T>::push_back(const T& value) -> void
+auto linked_list<T>::push_back(T const& value) -> void
 {
   T value_copy{ value };
   this->push_back(std::move(value_copy));
@@ -159,7 +159,7 @@ auto linked_list<T>::push_back(T&& value) -> void
 }
 
 template <typename T>
-auto linked_list<T>::push_front(const T& value) -> void
+auto linked_list<T>::push_front(T const& value) -> void
 {
   T value_copy{ value };
   this->push_front(std::move(value_copy));
@@ -204,19 +204,19 @@ auto linked_list<T>::end() -> linked_list<T>::iterator
 }
 
 template <typename T>
-linked_list<T>::list_node::list_node(const T& value)
+linked_list<T>::list_node::list_node(T const& value)
     : data{ value }, next{ nullptr }, previous{ nullptr }
 {
 }
 
 template <typename T>
-linked_list<T>::list_node::list_node(linked_list<T>::list_node&& rhs)
+linked_list<T>::list_node::list_node(linked_list<T>::list_node&& rhs) noexcept
 {
   *this = std::move(rhs);
 }
 
 template <typename T>
-auto linked_list<T>::list_node::operator=(list_node&& rhs)
+auto linked_list<T>::list_node::operator=(list_node&& rhs) noexcept
     -> linked_list<T>::list_node&
 {
   std::swap(this->data, rhs.data);
