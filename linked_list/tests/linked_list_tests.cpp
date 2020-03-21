@@ -83,3 +83,53 @@ TEST(linked_list, last_element_modified_trough_back_reference)
   back = 123;
   ASSERT_EQ(123, three_elements.back());
 }
+
+TEST(linked_list_iterator, iterator_default_constructable)
+{
+  auto default_iterator = linked_list<int>::iterator();
+}
+
+/*
+other linked list operator tests
+*/
+
+TEST(linked_list_iterator, empty_list_begin_equals_end)
+{
+  linked_list<int> empty_list;
+  auto begin = empty_list.begin();
+  auto end = empty_list.end();
+  ASSERT_EQ(begin, end);
+}
+
+TEST(linked_list_iterator, empty_list_end_equals_non_empty_end)
+{
+  linked_list<int> list;
+  auto empty_end = list.end();
+  list.push_back(42);
+  auto end = list.end();
+  ASSERT_EQ(empty_end, end);
+}
+
+TEST(linked_list_iterator, star_operator_gives_element_reference)
+{
+  linked_list<int> list;
+  list.push_back(42);
+  auto begin = list.begin();
+  *begin = 24;
+  ASSERT_EQ(24, *begin);
+}
+
+TEST(linked_list_iterator, arrow_operator_gives_element_reference)
+{
+  struct test_type
+  {
+    int data;
+  };
+  linked_list<test_type*> list;
+  auto value = test_type{};
+  value.data = 42;
+  list.push_back(&value);
+  auto begin = list.begin();
+  begin->data = 24;
+  ASSERT_EQ(24, begin->data);
+}

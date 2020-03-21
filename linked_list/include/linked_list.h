@@ -3,6 +3,7 @@
 
 #include <iterator>
 #include <memory>
+#include <type_traits>
 #include <utility>
 
 namespace mrai
@@ -69,11 +70,12 @@ public:
     iterator& operator--();
     iterator& operator--(int);
     iterator& operator=(iterator const & rhs);
-    iterator& operator=(iterator && rhs);
-    auto operator==(iterator const & rhs) -> bool;
-    auto operator!=(iterator const & rhs) -> bool;
+    iterator& operator=(iterator && rhs);*/
+    auto operator==(iterator const& rhs) const -> bool;
+    auto operator!=(iterator const& rhs) const -> bool;
     auto operator*() -> reference;
-    auto operator->() -> reference;*/
+    auto operator-> () -> reference;
+
   private:
     list_node* element_;
   };
@@ -85,7 +87,10 @@ public:
 };
 
 template <typename T>
-linked_list<T>::linked_list(): head_{ nullptr }, last_{ nullptr }, size_{ 0 }
+linked_list<T>::linked_list()
+    : head_{ std::make_unique<list_node>(T{}) },
+      last_{ head_.get() },
+      size_{ 0 }
 {
 }
 
@@ -138,9 +143,8 @@ auto linked_list<T>::push_back(T&& value) -> void
   auto next_node = std::make_unique<list_node>(std::forward<T>(value));
   if (empty())
   {
+    next_node->next = std::move(head_);
     head_ = std::move(next_node);
-    head_->next = std::make_unique<list_node>(T());
-    last_ = head_->next.get();
     last_->previous = head_.get();
   }
   else
@@ -167,9 +171,8 @@ auto linked_list<T>::push_front(T&& value) -> void
   auto previous_node = std::make_unique<list_node>(std::forward<T>(value));
   if (empty())
   {
+    previous_node->next = std::move(head_);
     head_ = std::move(previous_node);
-    head_->next = std::make_unique<list_node>(T());
-    last_ = head_->next.get();
     last_->previous = head_.get();
   }
   else
@@ -191,7 +194,7 @@ linked_list<T>::iterator::iterator(linked_list<T>::list_node* element)
 template <typename T>
 auto linked_list<T>::begin() -> linked_list<T>::iterator
 {
-  return linked_list<T>::iterator(*head_);
+  return linked_list<T>::iterator(head_.get());
 }
 
 template <typename T>
@@ -220,6 +223,37 @@ auto linked_list<T>::list_node::operator=(list_node&& rhs)
   std::swap(this->next, rhs.next);
   std::swap(this->previous, rhs.previous);
   return *this;
+}
+
+template <typename T>
+auto linked_list<T>::iterator::operator==(iterator const& rhs) const -> bool
+{
+  return this->element_ == rhs.element_;
+}
+
+template <typename T>
+auto linked_list<T>::iterator::operator!=(iterator const& rhs) const -> bool
+{
+  return !(*this == rhs);
+}
+
+template <typename T>
+auto linked_list<T>::iterator::operator*() -> reference
+{
+  if constexpr (std::is_pointer<T>())
+  {
+    return *(element_->data);
+  }
+  else
+  {
+    return element_->data;
+  }
+}
+
+template <typename T>
+auto linked_list<T>::iterator::operator-> () -> reference
+{
+  return element_->data;
 }
 
 }  // namespace mrai
