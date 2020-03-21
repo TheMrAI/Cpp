@@ -1,6 +1,7 @@
 #ifndef LINKED_LIST
 #define LINKED_LIST
 
+#include <iterator>
 #include <memory>
 #include <utility>
 
@@ -31,12 +32,12 @@ public:
 
   [[nodiscard]] auto back() -> T&
   {
-    return last_->data;
+    return last_->previous->data;
   }
 
   [[nodiscard]] auto back() const -> const T&
   {
-    return last_->data;
+    return last_->previous->data;
   }
 
   [[nodiscard]] auto size() const noexcept -> size_t
@@ -54,7 +55,6 @@ public:
   auto push_front(const T& value) -> void;
   auto push_front(T&& value) -> void;
 
-private:
   struct list_node
   {
     T data;
@@ -65,8 +65,54 @@ private:
         : data{ value }, next{ nullptr }, previous{ nullptr }
     {
     }
+    ~list_node() = default;
+    list_node(list_node const& rhs) = delete;
+    list_node(list_node&& rhs)
+    {
+      *this = rhs;
+    }
+    list_node& operator=(list_node const&) = delete;
+    list_node& operator=(list_node&& rhs)
+    {
+      std::swap(this->data, rhs.data);
+      std::swap(this->next, rhs.next);
+      std::swap(this->previous, rhs.previous);
+      return *this;
+    }
   };
 
+  class iterator
+  {
+  public:
+    using iterator_category = std::bidirectional_iterator_tag;
+    using reference = T&;
+    using pointer = T*;
+    using value_type = T;
+    using difference_type = void;
+
+    iterator(list_node* element);
+    /*iterator(iterator const & rhs);
+    iterator(iterator&& rhs);
+    iterator& operator++(); // pre increment
+    iterator& operator++(int); // post increment
+    iterator& operator--();
+    iterator& operator--(int);
+    iterator& operator=(iterator const & rhs);
+    iterator& operator=(iterator && rhs);
+    auto operator==(iterator const & rhs) -> bool;
+    auto operator!=(iterator const & rhs) -> bool;
+    auto operator*() -> reference;
+    auto operator->() -> reference;*/
+  private:
+    list_node* element_;
+  };
+
+  auto begin() -> iterator;
+  auto end() -> iterator;
+  /*auto cbegin() -> const_iterator;
+  auto cend() -> const_iterator;*/
+
+private:
   std::unique_ptr<list_node> head_;
   list_node* last_;
   size_t size_;
@@ -91,13 +137,16 @@ auto linked_list<T>::push_back(T&& value) -> void
   if (empty())
   {
     head_ = std::move(next_node);
-    last_ = head_.get();
+    head_->next = std::make_unique<list_node>(T());
+    last_ = head_->next.get();
+    last_->previous = head_.get();
   }
   else
   {
-    next_node->previous = last_;
-    last_->next = std::move(next_node);
-    last_ = last_->next.get();
+    next_node->previous = last_->previous;
+    last_->previous = next_node.get();
+    next_node->next = std::move(next_node->previous->next);
+    next_node->previous->next = std::move(next_node);
   }
 
   ++size_;
@@ -117,7 +166,9 @@ auto linked_list<T>::push_front(T&& value) -> void
   if (empty())
   {
     head_ = std::move(previous_node);
-    last_ = head_.get();
+    head_->next = std::make_unique<list_node>(T());
+    last_ = head_->next.get();
+    last_->previous = head_.get();
   }
   else
   {
@@ -127,6 +178,24 @@ auto linked_list<T>::push_front(T&& value) -> void
   }
 
   ++size_;
+}
+
+template <typename T>
+linked_list<T>::iterator::iterator(linked_list<T>::list_node* element)
+    : element_{ element }
+{
+}
+
+template <typename T>
+auto linked_list<T>::begin() -> linked_list<T>::iterator
+{
+  return linked_list<T>::iterator(*head_);
+}
+
+template <typename T>
+auto linked_list<T>::end() -> linked_list<T>::iterator
+{
+  return linked_list<T>::iterator(last_);
 }
 
 }  // namespace mrai
