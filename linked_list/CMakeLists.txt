@@ -1,25 +1,14 @@
 cmake_minimum_required(VERSION 3.13.0)
 
-add_library(linked_list
-STATIC
-    src/linked_list.cpp
-)
+add_library(linked_list INTERFACE)
 
 target_compile_features(linked_list 
-PUBLIC 
+INTERFACE 
     cxx_std_17
 )
 
-target_include_directories(linked_list
-PUBLIC
-    include
-)
+target_include_directories(linked_list INTERFACE include/)
 
-target_sources(linked_list
-PUBLIC
-    src
-)
-
-set_warning_levels(linked_list)
+#set_warning_levels(linked_list)
 
 add_subdirectory(tests)
