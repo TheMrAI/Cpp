@@ -31,3 +31,6 @@ add_subdirectory(rvalue_references) # lab 6
 
 # Containers
 add_subdirectory(linked_list)
+
+#Algorithms
+add_subdirectory(algorithms)
