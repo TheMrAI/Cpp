@@ -33,6 +33,16 @@ public:
   auto push_front(T const& value) -> void;
   auto push_front(T&& value) -> void;
 
+  // emplace_back()
+  // emplace_front();
+
+  auto pop_back() -> void;
+  auto pop_front() -> void;
+
+  // insert()
+  // emplace()
+  // erase()
+  // clear()
 private:
   struct list_node
   {
@@ -183,6 +193,35 @@ auto linked_list<T>::push_front(T&& value) -> void
   }
 
   ++size_;
+}
+
+template <typename T>
+auto linked_list<T>::pop_back() -> void
+{
+  if (this->size() <= 1)
+  {
+    pop_front();
+    return;
+  }
+  auto* before_last = last_->previous->previous;
+  before_last->next = std::move(last_->previous->next);
+  last_->previous = before_last;
+
+  --size_;
+}
+
+template <typename T>
+auto linked_list<T>::pop_front() -> void
+{
+  if (empty())
+  {
+    return;
+  }
+
+  head_ = std::move(head_->next);
+  head_->previous = nullptr;
+
+  --size_;
 }
 
 template <typename T>

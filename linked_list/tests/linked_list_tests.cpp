@@ -84,6 +84,60 @@ TEST(linked_list, last_element_modified_trough_back_reference)
   ASSERT_EQ(123, three_elements.back());
 }
 
+TEST(linked_list, pop_back_from_one_element)
+{
+  linked_list<int> one_element;
+  one_element.push_back(33);
+  one_element.pop_back();
+  ASSERT_TRUE(one_element.empty());
+}
+
+TEST(linked_list, pop_back_from_two_elements)
+{
+  linked_list<int> two_elements;
+  two_elements.push_back(33);
+  two_elements.push_back(44);
+  two_elements.pop_back();
+  ASSERT_EQ(two_elements.front(), two_elements.back());
+}
+
+TEST(linked_list, pop_back_decreases_size)
+{
+  linked_list<int> three_elements;
+  three_elements.push_back(33);
+  three_elements.push_back(44);
+  three_elements.push_back(55);
+  three_elements.pop_back();
+  ASSERT_EQ(2, three_elements.size());
+}
+
+TEST(linked_list, pop_front_from_one_element)
+{
+  linked_list<int> one_element;
+  one_element.push_back(33);
+  one_element.pop_front();
+  ASSERT_TRUE(one_element.empty());
+}
+
+TEST(linked_list, pop_front_from_two_elements)
+{
+  linked_list<int> two_elements;
+  two_elements.push_back(33);
+  two_elements.push_back(44);
+  two_elements.pop_front();
+  ASSERT_EQ(two_elements.front(), two_elements.back());
+}
+
+TEST(linked_list, pop_front_decreases_size)
+{
+  linked_list<int> three_elements;
+  three_elements.push_back(33);
+  three_elements.push_back(44);
+  three_elements.push_back(55);
+  three_elements.pop_front();
+  ASSERT_EQ(2, three_elements.size());
+}
+
 TEST(linked_list_iterator, iterator_default_constructable)
 {
   auto default_iterator = linked_list<int>::iterator();
