@@ -140,7 +140,7 @@ TEST(linked_list, pop_front_decreases_size)
 
 TEST(linked_list_iterator, iterator_default_constructable)
 {
-  auto default_iterator = linked_list<int>::iterator();
+  linked_list<int>::iterator();
 }
 
 /*
