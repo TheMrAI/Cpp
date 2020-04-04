@@ -11,7 +11,36 @@ namespace mrai
 template <typename T>
 class linked_list
 {
+private:
+  struct list_node;  // forward declaration
 public:
+  class iterator
+  {
+  public:
+    using iterator_category = std::bidirectional_iterator_tag;
+    using reference = T&;
+    using pointer = T*;
+    using value_type = T;
+    using difference_type = void;
+
+    explicit iterator(list_node* element = nullptr);
+    /*iterator(iterator const & rhs);
+    iterator(iterator&& rhs);
+    iterator& operator++(); // pre increment
+    iterator& operator++(int); // post increment
+    iterator& operator--();
+    iterator& operator--(int);
+    iterator& operator=(iterator const & rhs);
+    iterator& operator=(iterator && rhs);*/
+    auto operator==(iterator const& rhs) const -> bool;
+    auto operator!=(iterator const& rhs) const -> bool;
+    auto operator*() -> reference;
+    auto operator-> () -> reference;
+
+  private:
+    list_node* element_;
+  };
+
   linked_list();
   /*
   linked_list(const linked_list& rhs);
@@ -43,6 +72,12 @@ public:
   // emplace()
   // erase()
   // clear()
+
+  auto begin() -> iterator;
+  auto end() -> iterator;
+  /*auto cbegin() -> const_iterator;
+  auto cend() -> const_iterator;*/
+
 private:
   struct list_node
   {
@@ -61,39 +96,6 @@ private:
   std::unique_ptr<list_node> head_;
   list_node* last_;
   size_t size_;
-
-public:
-  class iterator
-  {
-  public:
-    using iterator_category = std::bidirectional_iterator_tag;
-    using reference = T&;
-    using pointer = T*;
-    using value_type = T;
-    using difference_type = void;
-
-    explicit iterator(list_node* element = nullptr);
-    /*iterator(iterator const & rhs);
-    iterator(iterator&& rhs);
-    iterator& operator++(); // pre increment
-    iterator& operator++(int); // post increment
-    iterator& operator--();
-    iterator& operator--(int);
-    iterator& operator=(iterator const & rhs);
-    iterator& operator=(iterator && rhs);*/
-    auto operator==(iterator const& rhs) const -> bool;
-    auto operator!=(iterator const& rhs) const -> bool;
-    auto operator*() -> reference;
-    auto operator-> () -> reference;
-
-  private:
-    list_node* element_;
-  };
-
-  auto begin() -> iterator;
-  auto end() -> iterator;
-  /*auto cbegin() -> const_iterator;
-  auto cend() -> const_iterator;*/
 };
 
 template <typename T>
