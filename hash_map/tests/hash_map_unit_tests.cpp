@@ -86,3 +86,39 @@ TEST_F(default_constructed_hash_map, begin_and_end_iterators_are_equal)
 {
   ASSERT_EQ(map.begin(), map.end());
 }
+
+class hash_map_with_one_element: public ::testing::Test
+{
+protected:
+  hash_map_with_one_element()
+  {
+    map.insert({ 0, "zero" });
+  }
+
+  hash_map<int, std::string> map;
+};
+
+TEST_F(hash_map_with_one_element, empty_is_false)
+{
+  ASSERT_FALSE(map.empty());
+}
+
+TEST_F(hash_map_with_one_element, size_is_one)
+{
+  ASSERT_EQ(map.size(), 1);
+}
+
+TEST_F(hash_map_with_one_element, contains_returns_true)
+{
+  ASSERT_TRUE(map.contains(0));
+}
+
+TEST_F(hash_map_with_one_element, bucket_count_is_20)
+{
+  ASSERT_EQ(map.bucket_count(), 20);
+}
+
+TEST_F(hash_map_with_one_element, zeroth_bucket_size_is_one)
+{
+  ASSERT_EQ(map.bucket_size(0), 1);
+}

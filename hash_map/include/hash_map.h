@@ -57,7 +57,7 @@ public:
 
   auto empty() -> bool;
   auto size() -> size_t;
-  // auto insert(const value_type& value) -> std::pair<iterator, bool>;
+  auto insert(const value_type& value) -> std::pair<iterator, bool>;
   // auto insert(value_type&& value) -> std::pair<iterator, bool>;
   // emplace
   // auto erase() ->  size_t;
@@ -164,6 +164,42 @@ template <typename Key, typename Value, typename HashFunction,
 auto hash_map<Key, Value, HashFunction, KeyEquality>::size() -> size_t
 {
   return element_count_;
+}
+
+template <typename Key, typename Value, typename HashFunction,
+          typename KeyEquality>
+auto hash_map<Key, Value, HashFunction, KeyEquality>::insert(
+    const typename hash_map<Key, Value, HashFunction, KeyEquality>::value_type&
+        value)
+    -> std::pair<
+        typename hash_map<Key, Value, HashFunction, KeyEquality>::iterator,
+        bool>
+{
+  auto key = value.first;
+  auto bucket_index = generate_bucket_index(key);
+  auto possible_location =
+      std::find_if(data_[bucket_index].begin(), data_[bucket_index].end(),
+                   [&key, this](const value_type& element) {
+                     return key_equality_(key, element.first);
+                   });
+  if (possible_location != data_[bucket_index].end())
+  {
+    return std::make_pair(
+        hash_map<Key, Value, HashFunction, KeyEquality>::iterator(
+            bucket_index, possible_location),
+        false);
+  }
+  auto actual_location = data_[bucket_index].insert(possible_location, value);
+  ++element_count_;
+  /*
+  if(max_load_factor() * data_.capacity() < element_count)
+  {
+    rehash();
+  }*/
+  return std::make_pair(
+      hash_map<Key, Value, HashFunction, KeyEquality>::iterator(
+          bucket_index, actual_location),
+      true);
 }
 
 template <typename Key, typename Value, typename HashFunction,
