@@ -81,3 +81,8 @@ TEST_F(default_constructed_hash_map, maximum_load_factor_set_to_1)
   map.max_load_factor(1.0f);
   ASSERT_FLOAT_EQ(map.max_load_factor(), 1.0f);
 }
+
+TEST_F(default_constructed_hash_map, begin_and_end_iterators_are_equal)
+{
+  ASSERT_EQ(map.begin(), map.end());
+}
