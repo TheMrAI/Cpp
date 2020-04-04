@@ -34,13 +34,13 @@ public:
   // emplace
   // auto erase() ->  size_t;
   // auto at(const Key& key) -> Value&l
-  // auto contains(const Key& key) -> bool;
+  auto contains(const Key& key) -> bool;
   // auto find(const Key& key) -> iterator;
 
   auto bucket_count() const -> size_t;
   auto max_bucket_count() -> size_t;
-  // auto bucket_size(size_t bucket_index) const -> size_t;
-  // auto bucket(const Key& key) const -> size_t;
+  auto bucket_size(size_t bucket_index) const -> size_t;
+  auto bucket(const Key& key) const -> size_t;
 
   // auto load_factor() const -> float;
   // auto max_load_factor() const -> float;
@@ -48,9 +48,11 @@ public:
   // auto rehash(size_t bucket_count) -> void;
   // auto reserve(size_t element_count) -> void;
 private:
-  using bucket = std::list<value_type>;
+  auto generate_bucket_index(const Key& key) const -> std::size_t;
 
-  std::vector<bucket> data_;
+  using bucket_type = std::list<value_type>;
+
+  std::vector<bucket_type> data_;
   std::size_t element_count_;
   const HashFunction hash_;
   const KeyEquality key_equality_;
@@ -61,9 +63,11 @@ template <typename Key, typename Value, typename HashFunction,
 hash_map<Key, Value, HashFunction, KeyEquality>::hash_map(
     size_t bucket_count, const HashFunction& hash,
     const KeyEquality& key_equality)
-    : data_{}, element_count_{ 0 }, hash_{ hash }, key_equality_{ key_equality }
+    : data_(bucket_count),
+      element_count_{ 0 },
+      hash_{ hash },
+      key_equality_{ key_equality }
 {
-  data_.reserve(bucket_count);
 }
 
 /*template <typename Key, typename Value, typename HashFunction,
@@ -78,7 +82,7 @@ template <typename Key, typename Value, typename HashFunction,
           typename KeyEquality>
 auto hash_map<Key, Value, HashFunction, KeyEquality>::empty() -> bool
 {
-  return data_.empty();
+  return element_count_ == 0;
 }
 
 template <typename Key, typename Value, typename HashFunction,
@@ -90,10 +94,18 @@ auto hash_map<Key, Value, HashFunction, KeyEquality>::size() -> size_t
 
 template <typename Key, typename Value, typename HashFunction,
           typename KeyEquality>
+auto hash_map<Key, Value, HashFunction, KeyEquality>::contains(const Key& key)
+    -> bool
+{
+  return false;
+}
+
+template <typename Key, typename Value, typename HashFunction,
+          typename KeyEquality>
 auto hash_map<Key, Value, HashFunction, KeyEquality>::bucket_count() const
     -> size_t
 {
-  return data_.size();
+  return data_.capacity();
 }
 
 template <typename Key, typename Value, typename HashFunction,
@@ -101,7 +113,32 @@ template <typename Key, typename Value, typename HashFunction,
 auto hash_map<Key, Value, HashFunction, KeyEquality>::max_bucket_count()
     -> size_t
 {
-  return data_.capacity();
+  return std::numeric_limits<std::size_t>::max();
+}
+
+template <typename Key, typename Value, typename HashFunction,
+          typename KeyEquality>
+auto hash_map<Key, Value, HashFunction, KeyEquality>::bucket_size(
+    size_t bucket_index) const -> size_t
+{
+  return data_[bucket_index].size();
+}
+
+template <typename Key, typename Value, typename HashFunction,
+          typename KeyEquality>
+auto hash_map<Key, Value, HashFunction, KeyEquality>::bucket(
+    const Key& key) const -> size_t
+{
+  return generate_bucket_index(key);
+}
+
+template <typename Key, typename Value, typename HashFunction,
+          typename KeyEquality>
+auto hash_map<Key, Value, HashFunction, KeyEquality>::generate_bucket_index(
+    const Key& key) const -> std::size_t
+{
+  auto hash_code = hash_(key);
+  return hash_code % data_.capacity();
 }
 
 }  // namespace mrai
