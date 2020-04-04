@@ -15,6 +15,8 @@ endfunction()
 
 add_subdirectory(../googletest ./build/) # googletest
 
+enable_testing()
+
 add_subdirectory(noisy)
 
 add_subdirectory(object_orientation) # lab 1

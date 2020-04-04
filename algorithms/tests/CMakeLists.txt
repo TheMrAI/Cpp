@@ -6,3 +6,5 @@ target_link_libraries(binary_search_tests PUBLIC
     gtest_main
     binary_search
 )
+
+add_test(binary_search binary_search_tests)

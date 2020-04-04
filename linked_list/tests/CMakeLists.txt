@@ -8,3 +8,5 @@ target_link_libraries(linked_list_tests PUBLIC
     gtest_main
     linked_list
 )
+
+add_test(linked_list linked_list_tests)

@@ -8,3 +8,5 @@ target_link_libraries(hash_map_unit_tests PUBLIC
     gtest_main
     hash_map
 )
+
+add_test(hash_map hash_map_unit_tests)
