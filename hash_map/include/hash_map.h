@@ -42,9 +42,9 @@ public:
   auto bucket_size(size_t bucket_index) const -> size_t;
   auto bucket(const Key& key) const -> size_t;
 
-  // auto load_factor() const -> float;
-  // auto max_load_factor() const -> float;
-  // auot max_load_factor(float max_load_factor) -> void;
+  auto load_factor() const -> float;
+  auto max_load_factor() const -> float;
+  auto max_load_factor(float max_load_factor) -> void;
   // auto rehash(size_t bucket_count) -> void;
   // auto reserve(size_t element_count) -> void;
 private:
@@ -54,6 +54,7 @@ private:
 
   std::vector<bucket_type> data_;
   std::size_t element_count_;
+  float maximum_load_factor_;
   const HashFunction hash_;
   const KeyEquality key_equality_;
 };
@@ -65,6 +66,7 @@ hash_map<Key, Value, HashFunction, KeyEquality>::hash_map(
     const KeyEquality& key_equality)
     : data_(bucket_count),
       element_count_{ 0 },
+      maximum_load_factor_{ 3.0f },
       hash_{ hash },
       key_equality_{ key_equality }
 {
@@ -97,7 +99,12 @@ template <typename Key, typename Value, typename HashFunction,
 auto hash_map<Key, Value, HashFunction, KeyEquality>::contains(const Key& key)
     -> bool
 {
-  return false;
+  auto index = generate_bucket_index(key);
+  auto searched_element = std::find_if(data_[index].begin(), data_[index].end(),
+                                       [&key](const value_type& element) {
+                                         return key == element.first;
+                                       });
+  return searched_element != data_[index].end();
 }
 
 template <typename Key, typename Value, typename HashFunction,
@@ -139,6 +146,34 @@ auto hash_map<Key, Value, HashFunction, KeyEquality>::generate_bucket_index(
 {
   auto hash_code = hash_(key);
   return hash_code % data_.capacity();
+}
+
+template <typename Key, typename Value, typename HashFunction,
+          typename KeyEquality>
+auto hash_map<Key, Value, HashFunction, KeyEquality>::load_factor() const
+    -> float
+{
+  return element_count_ / bucket_count();
+}
+
+template <typename Key, typename Value, typename HashFunction,
+          typename KeyEquality>
+auto hash_map<Key, Value, HashFunction, KeyEquality>::max_load_factor() const
+    -> float
+{
+  return maximum_load_factor_;
+}
+
+template <typename Key, typename Value, typename HashFunction,
+          typename KeyEquality>
+auto hash_map<Key, Value, HashFunction, KeyEquality>::max_load_factor(
+    float max_load_factor) -> void
+{
+  maximum_load_factor_ = max_load_factor;
+  /*if(load_factor() > max_load_factor)
+  {
+    rehash();
+  }*/
 }
 
 }  // namespace mrai

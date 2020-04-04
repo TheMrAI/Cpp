@@ -55,3 +55,29 @@ TEST_F(default_constructed_hash_map, bucket_index_for_0_is_0)
 {
   ASSERT_EQ(map.bucket(0), 0);
 }
+
+TEST_F(default_constructed_hash_map, bucket_index_for_19_is_19)
+{
+  ASSERT_EQ(map.bucket(19), 19);
+}
+
+TEST_F(default_constructed_hash_map, bucket_index_for_25_is_19)
+{
+  ASSERT_EQ(map.bucket(25), 5);
+}
+
+TEST_F(default_constructed_hash_map, load_factor_is_zero)
+{
+  ASSERT_EQ(map.load_factor(), 0);
+}
+
+TEST_F(default_constructed_hash_map, maximum_load_factor_is_3)
+{
+  ASSERT_FLOAT_EQ(map.max_load_factor(), 3.0f);
+}
+
+TEST_F(default_constructed_hash_map, maximum_load_factor_set_to_1)
+{
+  map.max_load_factor(1.0f);
+  ASSERT_FLOAT_EQ(map.max_load_factor(), 1.0f);
+}
