@@ -188,3 +188,15 @@ TEST_F(hash_map_with_one_element, zeroth_bucket_size_is_one)
 {
   ASSERT_EQ(map.bucket_size(0), 1);
 }
+
+TEST_F(hash_map_with_one_element, begin_gives_the_only_element)
+{
+  auto only_element = map.begin();
+  ASSERT_EQ(only_element->first, 0);
+  ASSERT_EQ(only_element->second, "zero");
+}
+
+TEST_F(hash_map_with_one_element, begin_incremented_once_is_end)
+{
+  ASSERT_EQ(++(map.begin()), map.end());
+}
