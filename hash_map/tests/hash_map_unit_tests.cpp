@@ -29,6 +29,11 @@ TEST_F(default_constructed_hash_map, contains_returns_false)
   ASSERT_FALSE(map.contains(3));
 }
 
+TEST_F(default_constructed_hash_map, find_returns_end)
+{
+  ASSERT_EQ(map.find(3), map.end());
+}
+
 TEST_F(default_constructed_hash_map, bucket_count_is_20)
 {
   ASSERT_EQ(map.bucket_count(), 20);
@@ -87,6 +92,52 @@ TEST_F(default_constructed_hash_map, begin_and_end_iterators_are_equal)
   ASSERT_EQ(map.begin(), map.end());
 }
 
+class hash_map_iterator_traits: public ::testing::Test
+{
+protected:
+  hash_map_iterator_traits()
+  {
+  }
+
+  hash_map<int, std::string> map;
+};
+
+TEST_F(hash_map_iterator_traits, iterator_category)
+{
+  ASSERT_EQ(typeid(std::iterator_traits<
+                   hash_map<int, std::string>::iterator>::iterator_category),
+            typeid(std::forward_iterator_tag));
+}
+
+TEST_F(hash_map_iterator_traits, reference)
+{
+  ASSERT_EQ(typeid(std::iterator_traits<
+                   hash_map<int, std::string>::iterator>::reference),
+            typeid(std::pair<const int, std::string>&));
+}
+
+TEST_F(hash_map_iterator_traits, pointer)
+{
+  ASSERT_EQ(
+      typeid(
+          std::iterator_traits<hash_map<int, std::string>::iterator>::pointer),
+      typeid(std::pair<const int, std::string>*));
+}
+
+TEST_F(hash_map_iterator_traits, value_type)
+{
+  ASSERT_EQ(typeid(std::iterator_traits<
+                   hash_map<int, std::string>::iterator>::value_type),
+            typeid(std::pair<const int, std::string>));
+}
+
+TEST_F(hash_map_iterator_traits, difference_type)
+{
+  ASSERT_EQ(typeid(std::iterator_traits<
+                   hash_map<int, std::string>::iterator>::difference_type),
+            typeid(void));
+}
+
 class hash_map_with_one_element: public ::testing::Test
 {
 protected:
@@ -111,6 +162,21 @@ TEST_F(hash_map_with_one_element, size_is_one)
 TEST_F(hash_map_with_one_element, contains_returns_true)
 {
   ASSERT_TRUE(map.contains(0));
+}
+
+TEST_F(hash_map_with_one_element, find_only_element)
+{
+  auto target = map.find(0);
+  ASSERT_EQ(target->first, 0);
+  ASSERT_EQ(target->second, "zero");
+}
+
+TEST_F(hash_map_with_one_element, change_value_for_the_only_element)
+{
+  auto target = map.find(0);
+  target->second = "potato";
+  target = map.find(0);
+  ASSERT_EQ(target->second, "potato");
 }
 
 TEST_F(hash_map_with_one_element, bucket_count_is_20)

@@ -12,32 +12,35 @@ template <typename Key, typename Value, typename HashFunction = std::hash<Key>,
 class hash_map
 {
 public:
-  using value_type = std::pair<Key, Value>;
+  using element_type = std::pair<const Key, Value>;
 
 private:
-  using bucket_type = std::list<value_type>;
+  using bucket_type = std::list<element_type>;
 
 public:
   class iterator
   {
   public:
     using iterator_category = std::forward_iterator_tag;
-    using reference = Value&;
-    using pointer = Value*;
-    using value_type = Value;
+    using reference = element_type&;
+    using pointer = element_type*;
+    using value_type = element_type;
     using difference_type = void;
 
-    // iterator(const iterator& rhs);
-    // iterator(iterator&&);
-    // iterator& iterator=(const iterator& rhs);
-    // iterator& iterator=(iterator&& rhs);
+    iterator(const iterator& rhs);
+    iterator(iterator&& rhs);
+    auto operator=(const iterator& rhs) -> iterator&;
+    auto operator=(iterator&& rhs) -> iterator&;
     auto operator==(const iterator& rhs) const -> bool;
     auto operator!=(const iterator& rhs) const -> bool;
+
+    auto operator*() -> reference;
+    auto operator-> () -> pointer;
 
   private:
     iterator(std::size_t bucket, typename bucket_type::iterator element);
 
-    const std::size_t bucket_;
+    std::size_t bucket_;
     typename bucket_type::iterator element_;
 
     friend hash_map;
@@ -57,13 +60,13 @@ public:
 
   auto empty() -> bool;
   auto size() -> size_t;
-  auto insert(const value_type& value) -> std::pair<iterator, bool>;
-  // auto insert(value_type&& value) -> std::pair<iterator, bool>;
+  auto insert(const element_type& value) -> std::pair<iterator, bool>;
+  // auto insert(element_type&& value) -> std::pair<iterator, bool>;
   // emplace
   // auto erase() ->  size_t;
   // auto at(const Key& key) -> Value&l
   auto contains(const Key& key) -> bool;
-  // auto find(const Key& key) -> iterator;
+  auto find(const Key& key) -> iterator;
 
   auto bucket_count() const -> size_t;
   auto max_bucket_count() -> size_t;
@@ -108,6 +111,46 @@ hash_map<Key, Value, HashFunction, KeyEquality>::iterator::iterator(
 
 template <typename Key, typename Value, typename HashFunction,
           typename KeyEquality>
+hash_map<Key, Value, HashFunction, KeyEquality>::iterator::iterator(
+    const iterator& rhs)
+{
+  bucket_ = rhs.bucket_;
+  element_ = rhs.element_;
+}
+
+template <typename Key, typename Value, typename HashFunction,
+          typename KeyEquality>
+hash_map<Key, Value, HashFunction, KeyEquality>::iterator::iterator(
+    iterator&& rhs)
+{
+  std::swap(bucket_, rhs.bucket_);
+  std::swap(element_, rhs.element_);
+}
+
+template <typename Key, typename Value, typename HashFunction,
+          typename KeyEquality>
+auto hash_map<Key, Value, HashFunction, KeyEquality>::iterator::operator=(
+    const iterator& rhs)
+    -> hash_map<Key, Value, HashFunction, KeyEquality>::iterator&
+{
+  bucket_ = rhs.bucket_;
+  element_ = rhs.element_;
+  return *this;
+}
+
+template <typename Key, typename Value, typename HashFunction,
+          typename KeyEquality>
+auto hash_map<Key, Value, HashFunction, KeyEquality>::iterator::operator=(
+    iterator&& rhs)
+    -> hash_map<Key, Value, HashFunction, KeyEquality>::iterator&
+{
+  std::swap(bucket_, rhs.bucket_);
+  std::swap(element_, rhs.element_);
+  return *this;
+}
+
+template <typename Key, typename Value, typename HashFunction,
+          typename KeyEquality>
 auto hash_map<Key, Value, HashFunction, KeyEquality>::iterator::operator==(
     const iterator& rhs) const -> bool
 {
@@ -124,6 +167,22 @@ auto hash_map<Key, Value, HashFunction, KeyEquality>::iterator::operator!=(
     const iterator& rhs) const -> bool
 {
   return !(*this == rhs);
+}
+
+template <typename Key, typename Value, typename HashFunction,
+          typename KeyEquality>
+auto hash_map<Key, Value, HashFunction, KeyEquality>::iterator::operator*()
+    -> reference
+{
+  return *element_;
+}
+
+template <typename Key, typename Value, typename HashFunction,
+          typename KeyEquality>
+auto hash_map<Key, Value, HashFunction, KeyEquality>::iterator::operator-> ()
+    -> pointer
+{
+  return &(*element_);
 }
 
 template <typename Key, typename Value, typename HashFunction,
@@ -169,8 +228,8 @@ auto hash_map<Key, Value, HashFunction, KeyEquality>::size() -> size_t
 template <typename Key, typename Value, typename HashFunction,
           typename KeyEquality>
 auto hash_map<Key, Value, HashFunction, KeyEquality>::insert(
-    const typename hash_map<Key, Value, HashFunction, KeyEquality>::value_type&
-        value)
+    const typename hash_map<Key, Value, HashFunction,
+                            KeyEquality>::element_type& value)
     -> std::pair<
         typename hash_map<Key, Value, HashFunction, KeyEquality>::iterator,
         bool>
@@ -179,7 +238,7 @@ auto hash_map<Key, Value, HashFunction, KeyEquality>::insert(
   auto bucket_index = generate_bucket_index(key);
   auto possible_location =
       std::find_if(data_[bucket_index].begin(), data_[bucket_index].end(),
-                   [&key, this](const value_type& element) {
+                   [&key, this](const element_type& element) {
                      return key_equality_(key, element.first);
                    });
   if (possible_location != data_[bucket_index].end())
@@ -207,12 +266,30 @@ template <typename Key, typename Value, typename HashFunction,
 auto hash_map<Key, Value, HashFunction, KeyEquality>::contains(const Key& key)
     -> bool
 {
-  auto index = generate_bucket_index(key);
-  auto searched_element = std::find_if(data_[index].begin(), data_[index].end(),
-                                       [&key](const value_type& element) {
-                                         return key == element.first;
-                                       });
-  return searched_element != data_[index].end();
+  auto target = find(key);
+  if (target == end())
+  {
+    return false;
+  }
+  return true;
+}
+
+template <typename Key, typename Value, typename HashFunction,
+          typename KeyEquality>
+auto hash_map<Key, Value, HashFunction, KeyEquality>::find(const Key& key)
+    -> iterator
+{
+  auto bucket_index = generate_bucket_index(key);
+  auto searched_element =
+      std::find_if(data_[bucket_index].begin(), data_[bucket_index].end(),
+                   [&key](const element_type& element) {
+                     return key == element.first;
+                   });
+  if (searched_element == data_[bucket_index].end())
+  {
+    return end();
+  }
+  return iterator{ bucket_index, searched_element };
 }
 
 template <typename Key, typename Value, typename HashFunction,
