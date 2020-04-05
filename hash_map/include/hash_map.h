@@ -69,7 +69,7 @@ public:
   auto insert(const element_type& value) -> std::pair<iterator, bool>;
   // auto insert(element_type&& value) -> std::pair<iterator, bool>;
   // emplace
-  // auto erase() ->  size_t;
+  auto erase(const Key& key) -> size_t;
   auto at(const Key& key) -> Value&;
   auto at(const Key& key) const -> const Value&;
   auto contains(const Key& key) -> bool;
@@ -309,6 +309,22 @@ auto hash_map<Key, Value, HashFunction, KeyEquality>::insert(
       hash_map<Key, Value, HashFunction, KeyEquality>::iterator(
           *this, bucket_index, actual_location),
       true);
+}
+
+template <typename Key, typename Value, typename HashFunction,
+          typename KeyEquality>
+auto hash_map<Key, Value, HashFunction, KeyEquality>::erase(const Key& key)
+    -> size_t
+{
+  std::size_t removed_count = 0;
+  auto element_to_remove = find(key);
+  if (element_to_remove != end())
+  {
+    data_[element_to_remove.bucket_].erase(element_to_remove.element_);
+    removed_count = 1;
+    element_count_ -= 1;
+  }
+  return removed_count;
 }
 
 template <typename Key, typename Value, typename HashFunction,
