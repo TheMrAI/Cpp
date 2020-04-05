@@ -83,10 +83,11 @@ public:
   auto load_factor() const -> float;
   auto max_load_factor() const -> float;
   auto max_load_factor(float max_load_factor) -> void;
-  // auto rehash(size_t bucket_count) -> void;
+  auto rehash(size_t bucket_count) -> void;
   // auto reserve(size_t element_count) -> void;
 private:
-  auto generate_bucket_index(const Key& key) const -> std::size_t;
+  auto generate_bucket_index(const Key& key, std::size_t bucket_cout) const
+      -> std::size_t;
 
   std::vector<bucket_type> data_;
   std::size_t element_count_;
@@ -285,7 +286,7 @@ auto hash_map<Key, Value, HashFunction, KeyEquality>::insert(
         bool>
 {
   auto key = value.first;
-  auto bucket_index = generate_bucket_index(key);
+  auto bucket_index = generate_bucket_index(key, data_.capacity());
   auto possible_location =
       std::find_if(data_[bucket_index].begin(), data_[bucket_index].end(),
                    [&key, this](const element_type& element) {
@@ -366,7 +367,7 @@ template <typename Key, typename Value, typename HashFunction,
 auto hash_map<Key, Value, HashFunction, KeyEquality>::find(const Key& key)
     -> iterator
 {
-  auto bucket_index = generate_bucket_index(key);
+  auto bucket_index = generate_bucket_index(key, data_.capacity());
   auto searched_element =
       std::find_if(data_[bucket_index].begin(), data_[bucket_index].end(),
                    [&key](const element_type& element) {
@@ -408,16 +409,7 @@ template <typename Key, typename Value, typename HashFunction,
 auto hash_map<Key, Value, HashFunction, KeyEquality>::bucket(
     const Key& key) const -> size_t
 {
-  return generate_bucket_index(key);
-}
-
-template <typename Key, typename Value, typename HashFunction,
-          typename KeyEquality>
-auto hash_map<Key, Value, HashFunction, KeyEquality>::generate_bucket_index(
-    const Key& key) const -> std::size_t
-{
-  auto hash_code = hash_(key);
-  return hash_code % data_.capacity();
+  return generate_bucket_index(key, data_.capacity());
 }
 
 template <typename Key, typename Value, typename HashFunction,
@@ -446,6 +438,35 @@ auto hash_map<Key, Value, HashFunction, KeyEquality>::max_load_factor(
   {
     rehash();
   }*/
+}
+
+template <typename Key, typename Value, typename HashFunction,
+          typename KeyEquality>
+auto hash_map<Key, Value, HashFunction, KeyEquality>::rehash(
+    size_t bucket_count) -> void
+{
+  auto minimum_bucket_count =
+      static_cast<std::size_t>(size() / max_load_factor());
+  auto new_bucket_count = std::max(minimum_bucket_count, bucket_count);
+
+  auto new_data = std::vector<bucket_type>{ new_bucket_count };
+
+  for (auto element : *this)
+  {
+    auto key = element.first;
+    auto bucket_index = generate_bucket_index(key, new_bucket_count);
+    new_data[bucket_index].push_back(std::move(element));
+  }
+  std::swap(data_, new_data);
+}
+
+template <typename Key, typename Value, typename HashFunction,
+          typename KeyEquality>
+auto hash_map<Key, Value, HashFunction, KeyEquality>::generate_bucket_index(
+    const Key& key, std::size_t bucket_cout) const -> std::size_t
+{
+  auto hash_code = hash_(key);
+  return hash_code % bucket_cout;
 }
 
 }  // namespace mrai

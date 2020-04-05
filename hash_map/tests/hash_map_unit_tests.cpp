@@ -271,3 +271,48 @@ TEST(hash_map_iterates_trough_elements, 10_elements_returned_in_order)
     ++index;
   }
 }
+
+class hash_map_with_five_elements_with_one_bucket_rehashed_to_five
+    : public ::testing::Test
+{
+protected:
+  hash_map_with_five_elements_with_one_bucket_rehashed_to_five()
+  {
+    map.max_load_factor(5);
+
+    map.insert({ 0, "zero" });
+    map.insert({ 1, "one" });
+    map.insert({ 2, "two" });
+    map.insert({ 3, "three" });
+    map.insert({ 4, "four" });
+
+    map.rehash(5);
+  }
+
+  hash_map<int, std::string> map{ 1 };
+};
+
+TEST_F(hash_map_with_five_elements_with_one_bucket_rehashed_to_five,
+       size_is_five)
+{
+  ASSERT_EQ(map.size(), 5);
+}
+
+TEST_F(hash_map_with_five_elements_with_one_bucket_rehashed_to_five,
+       bucket_count_is_five)
+{
+  ASSERT_EQ(map.bucket_count(), 5);
+}
+
+TEST_F(hash_map_with_five_elements_with_one_bucket_rehashed_to_five,
+       elements_in_order)
+{
+  std::vector<std::string> expected{ "zero", "one", "two", "three", "four" };
+  int index = 0;
+  for (auto element : map)
+  {
+    ASSERT_EQ(element.first, index);
+    ASSERT_EQ(element.second, expected[index]);
+    ++index;
+  }
+}
