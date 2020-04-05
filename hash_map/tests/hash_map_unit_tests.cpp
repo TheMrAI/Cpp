@@ -1,5 +1,8 @@
 #include <gtest/gtest.h>
 
+#include <string>
+#include <vector>
+
 #include "hash_map.h"
 
 using namespace mrai;
@@ -217,4 +220,30 @@ TEST_F(hash_map_with_one_element, begin_gives_the_only_element)
 TEST_F(hash_map_with_one_element, begin_incremented_once_is_end)
 {
   ASSERT_EQ(++(map.begin()), map.end());
+}
+
+TEST(hash_map_iterates_trough_elements, 10_elements_returned_in_order)
+{
+  std::vector<std::string> expected{ "zero", "one", "two",   "three",  "four",
+                                     "five", "six", "seven", "exight", "nine" };
+
+  hash_map<int, std::string> map{ 10 };
+  map.insert({ 0, expected[0] });
+  map.insert({ 1, expected[1] });
+  map.insert({ 2, expected[2] });
+  map.insert({ 3, expected[3] });
+  map.insert({ 4, expected[4] });
+  map.insert({ 5, expected[5] });
+  map.insert({ 6, expected[6] });
+  map.insert({ 7, expected[7] });
+  map.insert({ 8, expected[8] });
+  map.insert({ 9, expected[9] });
+
+  int index = 0;
+  for (auto element : map)
+  {
+    ASSERT_EQ(element.first, index);
+    ASSERT_EQ(element.second, expected[index]);
+    ++index;
+  }
 }
