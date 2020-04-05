@@ -24,6 +24,11 @@ TEST_F(default_constructed_hash_map, size_is_zero)
   ASSERT_EQ(map.size(), 0);
 }
 
+TEST_F(default_constructed_hash_map, at_throws_out_of_range)
+{
+  ASSERT_THROW({ map.at(3); }, std::out_of_range);
+}
+
 TEST_F(default_constructed_hash_map, contains_returns_false)
 {
   ASSERT_FALSE(map.contains(3));
@@ -157,6 +162,19 @@ TEST_F(hash_map_with_one_element, empty_is_false)
 TEST_F(hash_map_with_one_element, size_is_one)
 {
   ASSERT_EQ(map.size(), 1);
+}
+
+TEST_F(hash_map_with_one_element, at_returns_reference)
+{
+  map.at(0) = "potato";
+  ASSERT_EQ(map.begin()->first, 0);
+  ASSERT_EQ(map.begin()->second, "potato");
+}
+
+TEST_F(hash_map_with_one_element, at_returns_const_reference)
+{
+  const auto value = map.at(0);
+  ASSERT_EQ(value, "zero");
 }
 
 TEST_F(hash_map_with_one_element, contains_returns_true)

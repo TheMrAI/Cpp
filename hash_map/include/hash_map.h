@@ -70,7 +70,8 @@ public:
   // auto insert(element_type&& value) -> std::pair<iterator, bool>;
   // emplace
   // auto erase() ->  size_t;
-  // auto at(const Key& key) -> Value&l
+  auto at(const Key& key) -> Value&;
+  auto at(const Key& key) const -> const Value&;
   auto contains(const Key& key) -> bool;
   auto find(const Key& key) -> iterator;
 
@@ -308,6 +309,27 @@ auto hash_map<Key, Value, HashFunction, KeyEquality>::insert(
       hash_map<Key, Value, HashFunction, KeyEquality>::iterator(
           *this, bucket_index, actual_location),
       true);
+}
+
+template <typename Key, typename Value, typename HashFunction,
+          typename KeyEquality>
+auto hash_map<Key, Value, HashFunction, KeyEquality>::at(const Key& key)
+    -> Value&
+{
+  auto element = find(key);
+  if (element == end())
+  {
+    throw std::out_of_range("Invalid key!");
+  }
+  return element->second;
+}
+
+template <typename Key, typename Value, typename HashFunction,
+          typename KeyEquality>
+auto hash_map<Key, Value, HashFunction, KeyEquality>::at(const Key& key) const
+    -> const Value&
+{
+  return at(key);
 }
 
 template <typename Key, typename Value, typename HashFunction,
