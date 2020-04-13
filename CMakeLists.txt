@@ -29,6 +29,7 @@ add_subdirectory(rvalue_references) # lab 6
 # Containers
 add_subdirectory(linked_list)
 add_subdirectory(hash_map)
+add_subdirectory(red_black_tree)
 
 #Algorithms
 add_subdirectory(algorithms)
