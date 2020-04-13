@@ -10,6 +10,11 @@ protected:
   rb_tree<int> tree;
 };
 
+TEST_F(default_constructed_red_black_tree, cbegin_returns_cend)
+{
+  ASSERT_EQ(tree.cend(), tree.cbegin());
+}
+
 TEST_F(default_constructed_red_black_tree, empty_is_true)
 {
   ASSERT_TRUE(tree.empty());
