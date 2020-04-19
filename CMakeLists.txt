@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13.0)
 
-project(Cpp_practice C CXX)
+project(Cpp_tinkering C CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -17,19 +17,19 @@ add_subdirectory(../googletest ./build/) # googletest
 
 enable_testing()
 
-add_subdirectory(noisy)
-
-add_subdirectory(object_orientation) # lab 1
-add_subdirectory(object_hierarchies) # lab 2
-# lab 3
-# lab 4
-add_subdirectory(lifetime_and_smart_pointers) # lab 5
-add_subdirectory(rvalue_references) # lab 6
-
-# Containers
-add_subdirectory(linked_list)
-add_subdirectory(hash_map)
-add_subdirectory(red_black_tree)
-
 #Algorithms
 add_subdirectory(algorithms)
+
+# Containers
+add_subdirectory(containers/linked_list)
+add_subdirectory(containers/hash_map)
+add_subdirectory(containers/red_black_tree)
+
+# cpp_lab
+add_subdirectory(cpp_lab/noisy)
+add_subdirectory(cpp_lab/object_orientation) # lab 1
+add_subdirectory(cpp_lab/object_hierarchies) # lab 2
+# lab 3
+# lab 4
+add_subdirectory(cpp_lab/lifetime_and_smart_pointers) # lab 5
+add_subdirectory(cpp_lab/rvalue_references) # lab 6
