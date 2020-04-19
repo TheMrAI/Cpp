@@ -10,18 +10,18 @@ knows how to implement a certain functionality until the moment that
 assumption is tested. To rectify my own inadequacies and to give an honest
 try in understanding what happens and why, this repository was created.
 
-### Naming convention / Coding style
+## Naming convention / Coding style
 
 In naming variables and structuring the code I have made best efforts to follow [Google's style guide](https://google.github.io/styleguide/cppguide.html). The main motivator behind this is that I tend to like it, and it is
 written down. Following it, thus becomes convenient.
 
-### Formatting
+## Formatting
 
 There is no proper way to format code. People have learned to format it
 this or that way and they simply don't like how it is. In my opinion
 formatting is a ternary question and the only thing that really matters is
 that it is kept consistent.
-This repository is 100% formatted by [clang-format](https://clang.llvm.org/docs/ClangFormat.html), using a configuration based on the built in 
+This repository is 100% formatted by [clang-format](https://clang.llvm.org/docs/ClangFormat.html), using a configuration based on the built in
 Google style.
 
 Auto formatting can be executed by:
@@ -31,7 +31,7 @@ Which will auto format all staged files and re-stage them after the
 modification. This makes it a convenient candidate for being used as a
 git pre-commit hook.
 
-### Extra checks
+## Extra checks
 
 To make sure as few errors are made as possible [clang-tidy](https://clang.llvm.org/extra/clang-tidy/) is also employed. Almost all checks are
 enabled, that are not specific to some major project. This makes tidy a
