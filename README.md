@@ -24,6 +24,13 @@ that it is kept consistent.
 This repository is 100% formatted by [clang-format](https://clang.llvm.org/docs/ClangFormat.html), using a configuration based on the built in 
 Google style.
 
+Auto formatting can be executed by:
+> autoformat.py
+
+Which will auto format all staged files and re-stage them after the
+modification. This makes it a convenient candidate for being used as a
+git pre-commit hook.
+
 ### Extra checks
 
 To make sure as few errors are made as possible [clang-tidy](https://clang.llvm.org/extra/clang-tidy/) is also employed. Almost all checks are
