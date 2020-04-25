@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <iterator>
+#include <vector>
 
 #include "merge_sort.h"
 
@@ -78,86 +79,86 @@ TEST(merge_sort, non_sorted_input_gets_sorted)
 
 TEST(in_place_merge, empty_input)
 {
-  std::vector<int> data{};
-  in_place_merge(data.begin(), data.end(), data.end());
-  EXPECT_EQ(data.size(), 0);
+  auto input = std::vector<int>{};
+  in_place_merge(input.begin(), input.end(), input.end());
+  EXPECT_EQ(input.size(), 0);
 }
 
 TEST(in_place_merge, one_element)
 {
-  std::vector<int> data{ 1 };
-  in_place_merge(data.begin(), data.end(), data.end());
-  std::vector<int> expected{ 1 };
-  EXPECT_EQ(data, expected);
+  auto input = std::vector<int>{ 1 };
+  in_place_merge(input.begin(), input.end(), input.end());
+  auto expected = std::vector<int>{ 1 };
+  EXPECT_EQ(input, expected);
 }
 
 TEST(in_place_merge, 2_elements_in_order_no_change)
 {
-  std::vector<int> data{ 1, 2 };
-  in_place_merge(data.begin(), ++data.begin(), data.end());
-  std::vector<int> expected{ 1, 2 };
-  ASSERT_EQ(data, expected);
+  auto input = std::vector<int>{ 1, 2 };
+  in_place_merge(input.begin(), ++input.begin(), input.end());
+  auto expected = std::vector<int>{ 1, 2 };
+  ASSERT_EQ(input, expected);
 }
 
 TEST(in_place_merge, 2_elements_out_of_order_change)
 {
-  std::vector<int> data{ 2, 1 };
-  in_place_merge(data.begin(), ++data.begin(), data.end());
-  std::vector<int> expected{ 1, 2 };
-  ASSERT_EQ(data, expected);
+  auto input = std::vector<int>{ 2, 1 };
+  in_place_merge(input.begin(), ++input.begin(), input.end());
+  auto expected = std::vector<int>{ 1, 2 };
+  ASSERT_EQ(input, expected);
 }
 
 TEST(in_place_merge, 3_elements_out_of_order_change)
 {
-  std::vector<int> data{ 3, 1, 2 };
-  in_place_merge(data.begin(), ++data.begin(), data.end());
-  std::vector<int> expected{ 1, 2, 3 };
-  ASSERT_EQ(data, expected);
+  auto input = std::vector<int>{ 3, 1, 2 };
+  in_place_merge(input.begin(), ++input.begin(), input.end());
+  auto expected = std::vector<int>{ 1, 2, 3 };
+  ASSERT_EQ(input, expected);
 }
 
 TEST(in_place_merge, 5_elements_as_if_partially_sorted)
 {
-  std::vector<int> data{ 2, 4, 1, 3, 5 };
-  in_place_merge(data.begin(), std::next(data.begin(), 2), data.end());
-  std::vector<int> expected{ 1, 2, 3, 4, 5 };
-  ASSERT_EQ(data, expected);
+  auto input = std::vector<int>{ 2, 4, 1, 3, 5 };
+  in_place_merge(input.begin(), std::next(input.begin(), 2), input.end());
+  auto expected = std::vector<int>{ 1, 2, 3, 4, 5 };
+  ASSERT_EQ(input, expected);
 }
 
 TEST(in_place_merge, 6_elements_as_if_partially_sorted)
 {
-  std::vector<int> data{ 1, 6, 7, 2, 5, 8 };
-  in_place_merge(data.begin(), std::next(data.begin(), 3), data.end());
-  std::vector<int> expected{ 1, 2, 5, 6, 7, 8 };
-  ASSERT_EQ(data, expected);
+  auto input = std::vector<int>{ 1, 6, 7, 2, 5, 8 };
+  in_place_merge(input.begin(), std::next(input.begin(), 3), input.end());
+  auto expected = std::vector<int>{ 1, 2, 5, 6, 7, 8 };
+  ASSERT_EQ(input, expected);
 }
 
 TEST(merge_sort_in_place, empty_input)
 {
-  std::vector<int> data{};
-  merge_sort_in_place(data.begin(), data.end());
-  EXPECT_EQ(data.size(), 0);
+  auto input = std::vector<int>{};
+  merge_sort_in_place(input.begin(), input.end());
+  EXPECT_EQ(input.size(), 0);
 }
 
 TEST(merge_sort_in_place, 2_elements_out_of_order)
 {
-  std::vector<int> data{ 2, 1 };
-  merge_sort_in_place(data.begin(), data.end());
-  std::vector<int> expected{ 1, 2 };
-  ASSERT_EQ(data, expected);
+  auto input = std::vector<int>{ 2, 1 };
+  merge_sort_in_place(input.begin(), input.end());
+  auto expected = std::vector<int>{ 1, 2 };
+  ASSERT_EQ(input, expected);
 }
 
 TEST(merge_sort_in_place, 3_elements_out_of_order)
 {
-  std::vector<int> data{ 2, 3, 1 };
-  merge_sort_in_place(data.begin(), data.end());
-  std::vector<int> expected{ 1, 2, 3 };
-  ASSERT_EQ(data, expected);
+  auto input = std::vector<int>{ 2, 3, 1 };
+  merge_sort_in_place(input.begin(), input.end());
+  auto expected = std::vector<int>{ 1, 2, 3 };
+  ASSERT_EQ(input, expected);
 }
 
 TEST(merge_sort_in_place, 6_random_elements)
 {
-  std::vector<int> data{ 7, 6, 1, 2, 8, 5 };
-  merge_sort_in_place(data.begin(), data.end());
-  std::vector<int> expected{ 1, 2, 5, 6, 7, 8 };
-  ASSERT_EQ(data, expected);
+  auto input = std::vector<int>{ 7, 6, 1, 2, 8, 5 };
+  merge_sort_in_place(input.begin(), input.end());
+  auto expected = std::vector<int>{ 1, 2, 5, 6, 7, 8 };
+  ASSERT_EQ(input, expected);
 }

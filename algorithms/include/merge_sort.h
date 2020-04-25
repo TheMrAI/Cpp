@@ -1,7 +1,7 @@
 #ifndef ALGORITHMS_MERGE_SORT
 #define ALGORITHMS_MERGE_SORT
 
-#include <cmath>
+#include <algorithm>
 #include <iterator>
 
 namespace mrai
@@ -44,7 +44,7 @@ auto merge_sort(Iter begin, Iter end, OutIter output) -> void
   auto distance = std::distance(begin, end);
   if (distance > 1)
   {
-    auto midpoint = std::next(begin, std::floor(distance / 2));
+    auto midpoint = std::next(begin, distance / 2);
     // ghetto, but no better idea
     using data_type = typename std::iterator_traits<Iter>::value_type;
     auto lhs_merge_output = std::vector<data_type>();
@@ -106,7 +106,7 @@ auto merge_sort_in_place(Iter begin, Iter end) -> void
   auto distance = std::distance(begin, end);
   if (distance > 1)
   {
-    auto midpoint = std::next(begin, std::floor(distance / 2));
+    auto midpoint = std::next(begin, distance / 2);
     merge_sort_in_place(begin, midpoint);
     merge_sort_in_place(midpoint, end);
     in_place_merge(begin, midpoint, end);
