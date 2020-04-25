@@ -63,11 +63,16 @@ auto merge_sort(Iter begin, Iter end, OutIter output) -> void
 template <typename Iter>
 auto in_place_merge(Iter lhs, Iter rhs, Iter end) -> void
 {
-  auto writer = lhs;
-  ++lhs;
-  while (rhs < end)
+  if (rhs == end)
   {
-    if (*lhs < *rhs)
+    return;
+  }
+
+  Iter writer = lhs;
+  ++lhs;
+  while (lhs != end && rhs != end)
+  {
+    if (*lhs <= *rhs)
     {
       if (*lhs < *writer)
       {
@@ -83,7 +88,6 @@ auto in_place_merge(Iter lhs, Iter rhs, Iter end) -> void
         ++rhs;
       }
     }
-
     ++writer;
     if (writer == lhs)
     {
