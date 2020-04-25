@@ -45,14 +45,18 @@ auto merge_sort(Iter begin, Iter end, OutIter output) -> void
   if (distance > 1)
   {
     auto midpoint = std::next(begin, std::floor(distance / 2));
-
     // ghetto, but no better idea
-    // using data_type = typename std::iterator_traits<Iter>::value_type;
-    // auto lhs_merge_output = std::vector<data_type>();
-    merge_sort(begin, midpoint, output);
-    // auto rhs_merge_output = std::vector<data_type>();
-    merge_sort(midpoint, end, output);
-    merge(begin, midpoint, midpoint, end, output);
+    using data_type = typename std::iterator_traits<Iter>::value_type;
+    auto lhs_merge_output = std::vector<data_type>();
+    merge_sort(begin, midpoint, std::back_inserter(lhs_merge_output));
+    auto rhs_merge_output = std::vector<data_type>();
+    merge_sort(midpoint, end, std::back_inserter(rhs_merge_output));
+    merge(lhs_merge_output.begin(), lhs_merge_output.end(),
+          rhs_merge_output.begin(), rhs_merge_output.end(), output);
+  }
+  else  // one element
+  {
+    std::copy(begin, end, output);
   }
 }
 
