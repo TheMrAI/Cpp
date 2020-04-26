@@ -24,6 +24,7 @@ add_subdirectory(algorithms)
 add_subdirectory(containers/linked_list)
 add_subdirectory(containers/hash_map)
 add_subdirectory(containers/red_black_tree)
+add_subdirectory(containers/trie)
 
 # cpp_lab
 add_subdirectory(cpp_lab/noisy)
