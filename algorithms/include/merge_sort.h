@@ -74,8 +74,6 @@ auto in_place_merge(Iter lhs, Iter rhs, Iter end) -> void
 
   merge(lhs, rhs, rhs, end, std::back_inserter(buffer));
   std::copy(buffer.begin(), buffer.end(), lhs);
-
-  return;
 }
 
 template <typename Iter>
