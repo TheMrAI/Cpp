@@ -68,36 +68,14 @@ auto in_place_merge(Iter lhs, Iter rhs, Iter end) -> void
     return;
   }
 
-  Iter writer = lhs;
-  ++lhs;
-  while (lhs != end && rhs != end)
-  {
-    if (*lhs <= *rhs)
-    {
-      if (*lhs < *writer)
-      {
-        std::swap(*writer, *lhs);
-        ++lhs;
-      }
-    }
-    else
-    {
-      if (*rhs < *writer)
-      {
-        std::swap(*writer, *rhs);
-        ++rhs;
-      }
-    }
-    ++writer;
-    if (writer == lhs)
-    {
-      ++lhs;
-    }
-    if (lhs == rhs)
-    {
-      ++rhs;
-    }
-  }
+  using data_type = typename std::iterator_traits<Iter>::value_type;
+  auto buffer = std::vector<data_type>{};
+  buffer.reserve(std::distance(lhs, end));
+
+  merge(lhs, rhs, rhs, end, std::back_inserter(buffer));
+  std::copy(buffer.begin(), buffer.end(), lhs);
+
+  return;
 }
 
 template <typename Iter>
