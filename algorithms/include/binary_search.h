@@ -6,28 +6,26 @@
 
 namespace mrai
 {
-auto find(std::vector<int> const& data, int target) -> bool
-{
-  return binary_search(data.begin(), data.end(), target);
-}
-
 template <class Iter>
 auto recursive_binary_search(Iter begin, Iter end, int target) -> bool
 {
-  if (begin == end)
+  if (std::distance(begin, end) <= 1)
   {
-    return false;
+    if (begin != end && *begin == target)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
   }
 
   auto middle_element_offset =
       static_cast<std::size_t>(std::distance(begin, end) / 2);
-  Iter middle = std::next(middle, middle_element_offset);
+  Iter middle = std::next(begin, middle_element_offset);
 
-  if (target == *middle)
-  {
-    return true;
-  }
-  else if (target < *middle)
+  if (target < *middle)
   {
     return recursive_binary_search(begin, middle, target);
   }
