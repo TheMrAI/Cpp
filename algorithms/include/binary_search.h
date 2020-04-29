@@ -1,6 +1,7 @@
 #ifndef ALGORIGHTMS_BINARY_SEARCH
 #define ALGORIGHTMS_BINARY_SEARCH
 
+#include <iostream>
 #include <vector>
 
 namespace mrai
@@ -11,27 +12,61 @@ auto find(std::vector<int> const& data, int target) -> bool
 }
 
 template <class Iter>
-auto binary_search(Iter begin, Iter end, int target) -> bool
+auto recursive_binary_search(Iter begin, Iter end, int target) -> bool
 {
   if (begin == end)
   {
     return false;
   }
+
   auto middle_element_offset =
       static_cast<std::size_t>(std::distance(begin, end) / 2);
-  Iter middle = begin;
-  std::advance(middle, middle_element_offset);
+  Iter middle = std::next(middle, middle_element_offset);
+
   if (target == *middle)
   {
     return true;
   }
   else if (target < *middle)
   {
-    return binary_search(begin, middle, target);
+    return recursive_binary_search(begin, middle, target);
   }
   else
   {
-    return binary_search(middle, end, target);
+    return recursive_binary_search(middle, end, target);
+  }
+}
+
+template <class Iter>
+auto sequential_binary_search(Iter begin, Iter end, int target) -> bool
+{
+  if (begin == end)
+  {
+    return false;
+  }
+
+  while (std::distance(begin, end) > 1)
+  {
+    auto middle_element_offset =
+        static_cast<std::size_t>(std::distance(begin, end) / 2);
+    Iter middle = std::next(begin, middle_element_offset);
+    if (target < *middle)
+    {
+      end = middle;
+    }
+    else
+    {
+      begin = middle;
+    }
+  }
+
+  if (*begin == target)
+  {
+    return true;
+  }
+  else
+  {
+    return false;
   }
 }
 
