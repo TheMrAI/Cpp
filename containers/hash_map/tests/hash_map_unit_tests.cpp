@@ -63,12 +63,6 @@ TEST_F(default_constructed_hash_map, random_bucket_size_within_range_is_zero)
   ASSERT_EQ(map.bucket_size(5), 0);
 }
 
-TEST_F(default_constructed_hash_map,
-       bucket_size_outside_of_bucket_count_is_undefined_non_throwing)
-{
-  ASSERT_NO_THROW({ map.bucket_size(25); });
-}
-
 TEST_F(default_constructed_hash_map, bucket_index_for_0_is_0)
 {
   ASSERT_EQ(map.bucket(0), 0);
