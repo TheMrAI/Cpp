@@ -3,7 +3,12 @@ cmake_minimum_required(VERSION 3.13.0)
 project(Cpp_tinkering C CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+
+# release flags
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
+# debug flags
+set(CMAKE_CXX_FLAGS_DEBUG "-g -fsanitize=address")
 
 function(set_warning_levels TARGET_NAME)
     if ( CMAKE_COMPILER_IS_GNUCC )

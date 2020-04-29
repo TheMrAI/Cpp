@@ -1,7 +1,6 @@
 #ifndef ALGORIGHTMS_BINARY_SEARCH
 #define ALGORIGHTMS_BINARY_SEARCH
 
-#include <iostream>
 #include <vector>
 
 namespace mrai
