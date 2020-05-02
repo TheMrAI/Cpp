@@ -5,40 +5,59 @@
 
 namespace mrai
 {
-trie_node::trie_node(bool is_word): is_word_{ is_word }
+trie_node::trie_node(trie_node* parrent, bool is_word)
+    : parrent_{ parrent }, is_word_{ is_word }
 {
+}
+
+auto trie_node::is_word() const -> bool
+{
+  return is_word_;
 }
 
 trie::trie(): root_{ std::make_unique<trie_node>() }
 {
 }
 
-auto trie::insert(const std::string& word) -> void
+auto trie::insert(const std::string& word) -> const trie_node*
 {
+  if (word.empty())
+  {
+    return nullptr;
+  }
+
   auto* walker = root_.get();
   for (const auto& character : word)
   {
     if (walker->possible_paths_.count(character) == 0)
     {
-      walker->possible_paths_[character] = std::make_unique<trie_node>();
+      walker->possible_paths_[character] =
+          std::make_unique<trie_node>(walker, false);
     }
     walker = walker->possible_paths_[character].get();
   }
   walker->is_word_ = true;
+  return walker;
 }
 
-auto trie::is_word(const std::string& word) const -> bool
+auto trie::find(const std::string& word) -> trie_node*
 {
+  if (word.empty())
+  {
+    return nullptr;
+  }
+
   auto* walker = root_.get();
   for (const auto& character : word)
   {
     if (walker->possible_paths_.count(character) == 0)
     {
-      return false;
+      walker->possible_paths_[character] =
+          std::make_unique<trie_node>(walker, false);
     }
     walker = walker->possible_paths_[character].get();
   }
-  return walker->is_word_;
+  return walker;
 }
 
 auto trie::list_possibilities(const std::string& word)
@@ -50,7 +69,7 @@ auto trie::list_possibilities(const std::string& word)
   {
     if (walker->possible_paths_.count(character) == 0)
     {
-      walker->possible_paths_[character] = std::make_unique<trie_node>();
+      return possibilities;
     }
     walker = walker->possible_paths_[character].get();
   }
@@ -81,5 +100,4 @@ auto trie::collect_options(trie_node* walker, std::string word,
 {
 
 }*/
-
 }  // namespace mrai

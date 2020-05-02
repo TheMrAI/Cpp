@@ -4,32 +4,79 @@
 
 using namespace mrai;
 
-TEST(trie, insert_a_one_character_word)
+class default_constructed_trie: public ::testing::Test
 {
-  trie data;
-  data.insert("c");
-  ASSERT_TRUE(data.is_word("c"));
+protected:
+  default_constructed_trie()
+  {
+  }
+
+  trie empty_trie;
+};
+
+TEST_F(default_constructed_trie, insert_empty_string)
+{
+  ASSERT_EQ(empty_trie.insert(""), nullptr);
 }
 
-TEST(trie, insert_one_word_searching_for_another_gives_nothing)
+TEST_F(default_constructed_trie, insert_one_character)
 {
-  trie data;
-  data.insert("potato");
-  ASSERT_FALSE(data.is_word("cabbage"));
+  auto* node = empty_trie.insert("a");
+  EXPECT_NE(node, nullptr);
+  EXPECT_TRUE(node->is_word());
 }
 
-TEST(trie, insert_one_word_searching_for_subword_inst_a_word)
+TEST_F(default_constructed_trie, insert_multiple_words)
 {
-  trie data;
-  data.insert("helicopter");
-  ASSERT_FALSE(data.is_word("heli"));
+  auto* banana = empty_trie.insert("banana");
+  EXPECT_NE(banana, nullptr);
+  EXPECT_TRUE(banana->is_word());
+
+  auto* backlava = empty_trie.insert("backlava");
+  EXPECT_NE(backlava, nullptr);
+  EXPECT_TRUE(backlava->is_word());
+
+  auto* baba = empty_trie.insert("baba");
+  EXPECT_NE(baba, nullptr);
+  EXPECT_TRUE(baba->is_word());
 }
 
-TEST(trie, one_word_list_possibilities_returns_it)
+TEST_F(default_constructed_trie,
+       list_possibilities_empty_string_returns_nothing)
 {
+  auto possibilities = empty_trie.list_possibilities("");
+  ASSERT_EQ(possibilities.size(), 0);
+}
+
+TEST_F(default_constructed_trie,
+       list_possibilities_proper_value_returns_nothing)
+{
+  auto possibilities = empty_trie.list_possibilities("potato");
+  ASSERT_EQ(possibilities.size(), 0);
+}
+
+class loaded_trie: public ::testing::Test
+{
+protected:
+  loaded_trie()
+  {
+    data.insert("aba");
+    data.insert("abacus");
+    data.insert("bloat");
+    data.insert("bagamon");
+    data.insert("helicopter");
+    data.insert("bag");
+  }
+
   trie data;
-  data.insert("helicopter");
-  auto possibilities = data.list_possibilities("heli");
-  EXPECT_EQ(possibilities.size(), 1);
-  EXPECT_EQ(possibilities[0], "helicopter");
+};
+
+TEST_F(loaded_trie, find_all_words)
+{
+  EXPECT_NE(data.find("aba"), nullptr);
+  EXPECT_NE(data.find("abacus"), nullptr);
+  EXPECT_NE(data.find("bloat"), nullptr);
+  EXPECT_NE(data.find("bagamon"), nullptr);
+  EXPECT_NE(data.find("helicopter"), nullptr);
+  EXPECT_NE(data.find("bag"), nullptr);
 }
