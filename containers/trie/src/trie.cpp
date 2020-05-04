@@ -9,77 +9,82 @@ trie_node::trie_node(bool is_word): is_word_{ is_word }
 {
 }
 
-trie::trie(): root_{ std::make_unique<trie_node>() }
+auto trie_node::is_word() const -> bool
 {
+  return is_word_;
 }
 
-auto trie::insert(const std::string& word) -> void
+auto insert_word(trie_node& root_node, const std::string_view word)
+    -> trie_node&
 {
-  auto* walker = root_.get();
+  auto* walker = &root_node;
   for (const auto& character : word)
   {
     if (walker->possible_paths_.count(character) == 0)
     {
-      walker->possible_paths_[character] = std::make_unique<trie_node>();
+      walker->possible_paths_[character] = std::make_unique<trie_node>(false);
     }
     walker = walker->possible_paths_[character].get();
   }
   walker->is_word_ = true;
+  return *walker;
 }
 
-auto trie::is_word(const std::string& word) const -> bool
-{
-  auto* walker = root_.get();
-  for (const auto& character : word)
-  {
-    if (walker->possible_paths_.count(character) == 0)
-    {
-      return false;
-    }
-    walker = walker->possible_paths_[character].get();
-  }
-  return walker->is_word_;
-}
-
-auto trie::list_possibilities(const std::string& word)
-    -> std::vector<std::string>
-{
-  std::vector<std::string> possibilities;
-  auto* walker = root_.get();
-  for (const auto& character : word)
-  {
-    if (walker->possible_paths_.count(character) == 0)
-    {
-      walker->possible_paths_[character] = std::make_unique<trie_node>();
-    }
-    walker = walker->possible_paths_[character].get();
-  }
-  collect_options(walker, word, possibilities);
-
-  return possibilities;
-}
-
-auto trie::collect_options(trie_node* walker, std::string word,
-                           std::vector<std::string>& possibilities) const
+auto delete_word_recursively(trie_node& root_node, const std::string_view word)
     -> void
 {
-  if (walker->is_word_)
-  {
-    possibilities.push_back(word);
-  }
-  if (walker->possible_paths_.empty())
+  if (word.size() == 0)
   {
     return;
   }
-  for (const auto& entries : walker->possible_paths_)
+  auto character = word[0];
+  if (!root_node.possible_paths_.count(character))
   {
-    collect_options(entries.second.get(), word + entries.first, possibilities);
+    return;
+  }
+
+  auto& child_node = root_node.possible_paths_[character];
+  if (word.size() == 1)
+  {
+    child_node->is_word_ = false;
+    if (child_node->possible_paths_.empty())
+    {
+      root_node.possible_paths_.erase(character);
+    }
+    return;
+  }
+
+  delete_word_recursively(*child_node,
+                          std::string_view{ word.data() + 1, word.size() - 1 });
+
+  if (child_node->possible_paths_.size() == 0 && !child_node->is_word())
+  {
+    root_node.possible_paths_.erase(character);
+  }
+  return;
+}
+
+auto words_from_node(std::string current_word, const trie_node& node,
+                     std::vector<std::string>& words) -> void
+{
+  if (node.is_word())
+  {
+    words.push_back(current_word);
+  }
+  for (const auto& entry : node.possible_paths_)
+  {
+    words_from_node(current_word + entry.first, *entry.second.get(), words);
   }
 }
 
-/*auto trie::delete(const std::string& word) -> void
+auto words_from_node(const trie_node& root_node) -> std::vector<std::string>
 {
-
-}*/
+  auto words = std::vector<std::string>{};
+  for (const auto& entry : root_node.possible_paths_)
+  {
+    words_from_node(std::string(1, entry.first), *entry.second.get(), words);
+  }
+  return words;
+}
 
 }  // namespace mrai
