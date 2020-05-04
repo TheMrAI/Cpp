@@ -14,7 +14,8 @@ auto trie_node::is_word() const -> bool
   return is_word_;
 }
 
-auto insert_word(trie_node& root_node, const std::string& word) -> trie_node&
+auto insert_word(trie_node& root_node, const std::string_view word)
+    -> trie_node&
 {
   auto* walker = &root_node;
   for (const auto& character : word)

@@ -23,7 +23,8 @@ public:
   std::unordered_map<char, std::unique_ptr<trie_node>> possible_paths_;
 };
 
-auto insert_word(trie_node& root_node, const std::string& word) -> trie_node&;
+auto insert_word(trie_node& root_node, const std::string_view word)
+    -> trie_node&;
 auto delete_word_recursively(trie_node& root_node, const std::string_view word)
     -> void;
 auto words_from_node(std::string current_word, const trie_node& node,
