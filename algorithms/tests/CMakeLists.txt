@@ -23,3 +23,11 @@ target_link_libraries(quick_sort_tests PUBLIC
 )
 set_warning_levels(quick_sort_tests)
 add_test(quick_sort quick_sort_tests)
+
+add_executable(matrix_multiplication_tests matrix_multiplication_tests.cpp)
+target_link_libraries(matrix_multiplication_tests PUBLIC
+    gtest_main
+    matrix_multiplication
+)
+set_warning_levels(matrix_multiplication_tests)
+add_test(matrix_multiplication matrix_multiplication_tests)

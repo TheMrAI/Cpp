@@ -12,4 +12,8 @@ add_library(quick_sort INTERFACE)
 target_compile_features(quick_sort INTERFACE cxx_std_17)
 target_include_directories(quick_sort INTERFACE include/)
 
+add_library(matrix_multiplication INTERFACE)
+target_compile_features(matrix_multiplication INTERFACE cxx_std_17)
+target_include_directories(matrix_multiplication INTERFACE include/)
+
 add_subdirectory(tests)
