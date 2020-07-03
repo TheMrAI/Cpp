@@ -1,14 +1,56 @@
-#!/usr/bin/python3.8
+#!/usr/bin/python3
 import subprocess
 import os
+import argparse
+from typing import List
 
-git_diff = subprocess.run(['git', 'diff', '--cached', '--name-only'], capture_output=True, text=True)
-clang_format_command_parameters = ['clang-format', '--style=file', '-i', 'file_name']
+clang_format_version = 'clang-format-10'
 
-for file_path in git_diff.stdout.splitlines():
-    _, extension = os.path.splitext(file_path)
-    if extension not in {'.cpp', '.cc', '.CC', '.c', '.hpp', '.h', '.H'}:
-        continue
-    clang_format_command_parameters[3] = file_path
-    subprocess.run(clang_format_command_parameters)
-    subprocess.run(['git', 'add', file_path])
+
+def collect_files(target_type: str) -> List[str]:
+    switch = {
+        'staged': ['git', 'diff', '--cached', '--name-only'],
+        'modified': ['git', 'diff', '--name-only'],
+        'all': ['git', 'ls-files']
+    }
+
+    file_candidates = subprocess.run(switch[target_type], capture_output=True, text=True)
+
+    files_to_format = []
+    for file_path in file_candidates.stdout.splitlines():
+        _, extension = os.path.splitext(file_path)
+        if extension in {'.cpp', '.cc', '.CC', '.c', '.hpp', '.h', '.H'}:
+            files_to_format.append(file_path)
+
+    return files_to_format
+
+
+def format_files(file_names: List[str]) -> None:
+    clang_format_command_parameters = [clang_format_version, '--style=file', '-i', 'file_name']
+    for file_name in file_names:
+        clang_format_command_parameters[3] = file_name
+        subprocess.run(clang_format_command_parameters)
+
+
+def stage_files(file_names: List[str]) -> None:
+    for file_name in file_names:
+        subprocess.run(['git', 'add', file_name])
+
+
+def main(arguments: argparse.Namespace) -> int:
+    files = collect_files(arguments.targets)
+    format_files(files)
+    if arguments.stage:
+        stage_files(files)
+    return 0
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Auto-format code, using clang-format.')
+    parser.add_argument('-t', '--targets', choices=['all', 'staged', 'modified'], default='modified',
+                        help='Specify the set of files to format.')
+    parser.add_argument('-s', '--stage', action='store_true',
+                        help='Automatically stage modified files, after formatting.')
+
+    args = parser.parse_args()
+    exit(main(args))

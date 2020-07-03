@@ -6,11 +6,11 @@
 namespace mrai
 {
 template <class Iter>
-auto recursive_binary_search(Iter begin, Iter end, int target) -> bool
+auto recursive_binary_search( Iter begin, Iter end, int target ) -> bool
 {
-  if (std::distance(begin, end) <= 1)
+  if ( std::distance( begin, end ) <= 1 )
   {
-    if (begin != end && *begin == target)
+    if ( begin != end && *begin == target )
     {
       return true;
     }
@@ -20,34 +20,32 @@ auto recursive_binary_search(Iter begin, Iter end, int target) -> bool
     }
   }
 
-  auto middle_element_offset =
-      static_cast<std::size_t>(std::distance(begin, end) / 2);
-  Iter middle = std::next(begin, middle_element_offset);
+  auto middle_element_offset = static_cast<std::size_t>( std::distance( begin, end ) / 2 );
+  Iter middle = std::next( begin, middle_element_offset );
 
-  if (target < *middle)
+  if ( target < *middle )
   {
-    return recursive_binary_search(begin, middle, target);
+    return recursive_binary_search( begin, middle, target );
   }
   else
   {
-    return recursive_binary_search(middle, end, target);
+    return recursive_binary_search( middle, end, target );
   }
 }
 
 template <class Iter>
-auto sequential_binary_search(Iter begin, Iter end, int target) -> bool
+auto sequential_binary_search( Iter begin, Iter end, int target ) -> bool
 {
-  if (begin == end)
+  if ( begin == end )
   {
     return false;
   }
 
-  while (std::distance(begin, end) > 1)
+  while ( std::distance( begin, end ) > 1 )
   {
-    auto middle_element_offset =
-        static_cast<std::size_t>(std::distance(begin, end) / 2);
-    Iter middle = std::next(begin, middle_element_offset);
-    if (target < *middle)
+    auto middle_element_offset = static_cast<std::size_t>( std::distance( begin, end ) / 2 );
+    Iter middle = std::next( begin, middle_element_offset );
+    if ( target < *middle )
     {
       end = middle;
     }
@@ -57,7 +55,7 @@ auto sequential_binary_search(Iter begin, Iter end, int target) -> bool
     }
   }
 
-  if (*begin == target)
+  if ( *begin == target )
   {
     return true;
   }

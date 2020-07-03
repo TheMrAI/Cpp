@@ -9,34 +9,34 @@ namespace mrai
 // quicksort_of the left and right
 // requires bidirectional iterator
 template <typename Iter>
-auto quicksort_lr(Iter begin, Iter end) -> void
+auto quicksort_lr( Iter begin, Iter end ) -> void
 {
-  if (std::distance(begin, end) < 2)
+  if ( std::distance( begin, end ) < 2 )
   {
     return;
   }
 
-  auto pivot = std::prev(end, 1);
+  auto pivot = std::prev( end, 1 );
   auto smaller = begin;
   auto larger = begin;
 
-  while (larger != pivot)
+  while ( larger != pivot )
   {
-    if (*larger > *pivot)
+    if ( *larger > *pivot )
     {
       ++larger;
     }
     else
     {
-      std::iter_swap(smaller, larger);
+      std::iter_swap( smaller, larger );
       ++smaller;
       ++larger;
     }
   }
-  std::iter_swap(smaller, pivot);
+  std::iter_swap( smaller, pivot );
 
-  quicksort_lr(begin, smaller);
-  quicksort_lr(smaller, end);
+  quicksort_lr( begin, smaller );
+  quicksort_lr( smaller, end );
 }
 
 }  // namespace mrai

@@ -10,10 +10,10 @@ auto main() -> int
   auto from_local = mrai::create_noisy_from_local();
 
   std::cout << "do_something_with_noisy_cref()\n";
-  mrai::do_something_with_noisy_cref(mrai::Noisy());
+  mrai::do_something_with_noisy_cref( mrai::Noisy() );
   std::cout << "do_something_with_noisy_value()\n";
-  mrai::do_something_with_noisy_value(mrai::Noisy());
+  mrai::do_something_with_noisy_value( mrai::Noisy() );
   std::cout << "do_something_with_noisy_rref()\n";
-  mrai::do_something_with_noisy_rref(mrai::Noisy());
+  mrai::do_something_with_noisy_rref( mrai::Noisy() );
   std::cout << std::endl;
 }

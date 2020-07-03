@@ -32,7 +32,7 @@ private:
   };
 
 public:
-  explicit rb_tree(const Compare& comparator = Compare());
+  explicit rb_tree( const Compare& comparator = Compare() );
 
   class const_iterator
   {
@@ -43,22 +43,22 @@ public:
     using value_type = Key;
     using difference_type = void;
 
-    const_iterator(const const_iterator& rhs);
-    const_iterator(const_iterator&& rhs);
+    const_iterator( const const_iterator& rhs );
+    const_iterator( const_iterator&& rhs );
     /*auto operator=(const const_iterator& rhs) -> const_iterator&;
     auto operator=(const_iterator&& rhs) -> const_iterator&;
     */
-    auto operator==(const const_iterator& rhs) const -> bool;
+    auto operator==( const const_iterator& rhs ) const -> bool;
     /*auto operator++() -> const_iterator&;
     auto operator++(int) -> const_iterator&;
     auto operator--() -> const_iterator&;
     auto operator--(int) -> const_iterator&;
     */
     auto operator*() -> reference;
-    auto operator-> () -> pointer;
+    auto operator->() -> pointer;
 
   private:
-    explicit const_iterator(red_black_node* element);
+    explicit const_iterator( red_black_node* element );
 
     const red_black_node* element_;
 
@@ -85,26 +85,23 @@ private:
 };
 
 template <typename Key, typename Compare>
-rb_tree<Key, Compare>::const_iterator::const_iterator(red_black_node* element)
-    : element_{ element }
-{
-}
+rb_tree<Key, Compare>::const_iterator::const_iterator( red_black_node* element ): element_{ element }
+{}
 
 template <typename Key, typename Compare>
-rb_tree<Key, Compare>::const_iterator::const_iterator(const const_iterator& rhs)
+rb_tree<Key, Compare>::const_iterator::const_iterator( const const_iterator& rhs )
 {
   element_ = rhs.element;
 }
 
 template <typename Key, typename Compare>
-rb_tree<Key, Compare>::const_iterator::const_iterator(const_iterator&& rhs)
+rb_tree<Key, Compare>::const_iterator::const_iterator( const_iterator&& rhs )
 {
-  std::swap(element_, rhs.element_);
+  std::swap( element_, rhs.element_ );
 }
 
 template <typename Key, typename Compare>
-auto rb_tree<Key, Compare>::const_iterator::operator==(
-    const const_iterator& rhs) const -> bool
+auto rb_tree<Key, Compare>::const_iterator::operator==( const const_iterator& rhs ) const -> bool
 {
   // comparing only the pointers, if they both null it's okay
   // if they point to the exact same object it is okay as well
@@ -118,16 +115,14 @@ auto rb_tree<Key, Compare>::const_iterator::operator*() -> reference
 }
 
 template <typename Key, typename Compare>
-auto rb_tree<Key, Compare>::const_iterator::operator-> () -> pointer
+auto rb_tree<Key, Compare>::const_iterator::operator->() -> pointer
 {
-  return *(element_->key);
+  return *( element_->key );
 }
 
 template <typename Key, typename Compare>
-rb_tree<Key, Compare>::rb_tree(const Compare& comparator)
-    : comparator_{ comparator }, size_{ 0 }
-{
-}
+rb_tree<Key, Compare>::rb_tree( const Compare& comparator ): comparator_{ comparator }, size_{ 0 }
+{}
 
 template <typename Key, typename Compare>
 auto rb_tree<Key, Compare>::cbegin() -> const_iterator
