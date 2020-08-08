@@ -12,4 +12,8 @@ add_library(quick_sort INTERFACE)
 target_compile_features(quick_sort INTERFACE cxx_std_17)
 target_include_directories(quick_sort INTERFACE include/)
 
+add_library(maximal_subarray INTERFACE)
+target_compile_features(maximal_subarray INTERFACE cxx_std_17)
+target_include_directories(maximal_subarray INTERFACE include/)
+
 add_subdirectory(tests)

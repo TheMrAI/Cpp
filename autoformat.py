@@ -3,7 +3,7 @@ import subprocess
 import os
 
 git_diff = subprocess.run(['git', 'diff', '--cached', '--name-only'], capture_output=True, text=True)
-clang_format_command_parameters = ['clang-format', '--style=file', '-i', 'file_name']
+clang_format_command_parameters = ['clang-format-10', '--style=file', '-i', 'file_name']
 
 for file_path in git_diff.stdout.splitlines():
     _, extension = os.path.splitext(file_path)

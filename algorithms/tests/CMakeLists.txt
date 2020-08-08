@@ -23,3 +23,11 @@ target_link_libraries(quick_sort_tests PUBLIC
 )
 set_warning_levels(quick_sort_tests)
 add_test(quick_sort quick_sort_tests)
+
+add_executable(maximal_subarray_tests maximal_subarray_tests.cpp)
+target_link_libraries(maximal_subarray_tests PUBLIC
+    gtest_main
+    maximal_subarray
+)
+set_warning_levels(maximal_subarray_tests)
+add_test(maximal_subarray maximal_subarray_tests)
