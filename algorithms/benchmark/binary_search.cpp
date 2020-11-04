@@ -101,4 +101,70 @@ BENCHMARK(BM_recursive_binary_search_100k);
 BENCHMARK(BM_recursive_binary_search_1M);
 BENCHMARK(BM_recursive_binary_search_10M);
 
+
+static void BM_sequential_binary_search_10(benchmark::State& state)
+{
+  auto input = generate_incrementing_sequence(10);
+  auto target = generate_random_target(10);
+  for (auto _ : state)
+    [[maybe_unused]] auto result = sequential_binary_search(input.begin(), input.end(), target);
+}
+
+static void BM_sequential_binary_search_100(benchmark::State& state)
+{
+  auto input = generate_incrementing_sequence(100);
+  auto target = generate_random_target(100);
+  for (auto _ : state)
+    [[maybe_unused]] auto result = sequential_binary_search(input.begin(), input.end(), target);
+}
+
+static void BM_sequential_binary_search_1k(benchmark::State& state)
+{
+  auto input = generate_incrementing_sequence(1'000);
+  auto target = generate_random_target(1'000);
+  for (auto _ : state)
+    [[maybe_unused]] auto result = sequential_binary_search(input.begin(), input.end(), target);
+}
+
+static void BM_sequential_binary_search_10k(benchmark::State& state)
+{
+  auto input = generate_incrementing_sequence(10'000);
+  auto target = generate_random_target(10'000);
+  for (auto _ : state)
+    [[maybe_unused]] auto result = sequential_binary_search(input.begin(), input.end(), target);
+}
+
+static void BM_sequential_binary_search_100k(benchmark::State& state)
+{
+  auto input = generate_incrementing_sequence(100'000);
+  auto target = generate_random_target(100'000);
+  for (auto _ : state)
+    [[maybe_unused]] auto result = sequential_binary_search(input.begin(), input.end(), target);
+}
+
+static void BM_sequential_binary_search_1M(benchmark::State& state)
+{
+  auto input = generate_incrementing_sequence(1'000'000);
+  auto target = generate_random_target(1'000'000);
+  for (auto _ : state)
+    [[maybe_unused]] auto result = sequential_binary_search(input.begin(), input.end(), target);
+}
+
+static void BM_sequential_binary_search_10M(benchmark::State& state)
+{
+  auto input = generate_incrementing_sequence(10'000'000);
+  auto target = generate_random_target(10'000'000);
+  for (auto _ : state)
+    [[maybe_unused]] auto result = sequential_binary_search(input.begin(), input.end(), target);
+}
+
+BENCHMARK(BM_sequential_binary_search_10);
+BENCHMARK(BM_sequential_binary_search_100);
+BENCHMARK(BM_sequential_binary_search_1k);
+BENCHMARK(BM_sequential_binary_search_10k);
+BENCHMARK(BM_sequential_binary_search_100k);
+BENCHMARK(BM_sequential_binary_search_1M);
+BENCHMARK(BM_sequential_binary_search_10M);
+
+
 BENCHMARK_MAIN();
