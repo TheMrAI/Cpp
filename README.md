@@ -74,3 +74,34 @@ After setup the building is simply done by running:
 
 Tests then can be executed by running:
 > run_tests.py
+
+### Using Docker
+
+#### Building the Docker image
+
+> docker build -t cpp_builder:alpha .
+
+#### Building and testing with Docker
+
+Navigate to the root folder of this project and run the following command:
+
+> docker run -i --mount type=bind,source="$(pwd)",target=/project_tree/cpp cpp_builder:alpha /bin/bash -c "project_tree/cpp/run_build.py -d; project_tree/cpp/run_tests.py -d"
+
+The above command will start the container execute a debug build and run the unit
+tests for it.
+
+The docker container has the appropriate directory structure set up, so the
+caller doesn't have to worry about it.
+- project_tree
+   - cpp
+   - googletest
+
+For the moment the Docker image has googletest built into it. There may be a
+better way, but for the time being this is enough.
+The project structure is bind mounted into Docker so the source does not have to
+be copied around and the images being rebuilt on every code change. This is
+intended only for development purposes. However, this way the artefacts of the
+build process **build** folder will seep back into the original source. Not very
+clean and doesn't make much sense as what we win by having Docker containing
+everything necessary, we loose it by putting the built binaries, libraries back
+into a context where they have no bussiness to be.
