@@ -12,9 +12,9 @@ add_library(merge_sort INTERFACE)
 target_compile_features(merge_sort INTERFACE cxx_std_17)
 target_include_directories(merge_sort INTERFACE include/)
 
-add_library(quick_sort INTERFACE)
-target_compile_features(quick_sort INTERFACE cxx_std_17)
-target_include_directories(quick_sort INTERFACE include/)
+add_library(quicksort INTERFACE)
+target_compile_features(quicksort INTERFACE cxx_std_17)
+target_include_directories(quicksort INTERFACE include/)
 
 add_library(maximal_subarray INTERFACE)
 target_compile_features(maximal_subarray INTERFACE cxx_std_17)
