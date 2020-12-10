@@ -2,9 +2,12 @@
 import subprocess
 import argparse
 import os
+import pathlib
+
+FILE_PATH = pathlib.Path(__file__).parent.absolute()
 
 def execute_tests(build_type):
-    build_directory = 'build/{0}'.format(build_type)
+    build_directory = f'{FILE_PATH}/build/{build_type}'
     working_directory = os.getcwd()
     os.chdir(build_directory)
     subprocess.run(args=['make', 'test'])
