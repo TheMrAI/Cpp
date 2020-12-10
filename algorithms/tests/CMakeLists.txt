@@ -8,6 +8,14 @@ target_link_libraries(binary_search_tests PUBLIC
 set_warning_levels(binary_search_tests)
 add_test(binary_search binary_search_tests)
 
+add_executable(heapsort_tests heapsort_tests.cpp)
+target_link_libraries(heapsort_tests PUBLIC
+    gtest_main
+    heapsort
+)
+set_warning_levels(heapsort_tests)
+add_test(heapsort heapsort_tests)
+
 add_executable(merge_sort_tests merge_sort_tests.cpp)
 target_link_libraries(merge_sort_tests PUBLIC
     gtest_main

@@ -4,6 +4,10 @@ add_library(binary_search INTERFACE)
 target_compile_features(binary_search INTERFACE cxx_std_17)
 target_include_directories(binary_search INTERFACE include/)
 
+add_library(heapsort INTERFACE)
+target_compile_features(heapsort INTERFACE cxx_std_17)
+target_include_directories(heapsort INTERFACE include/)
+
 add_library(merge_sort INTERFACE)
 target_compile_features(merge_sort INTERFACE cxx_std_17)
 target_include_directories(merge_sort INTERFACE include/)
