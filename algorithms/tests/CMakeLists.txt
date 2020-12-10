@@ -40,6 +40,14 @@ target_link_libraries(counting_sort_tests PUBLIC
 set_warning_levels(counting_sort_tests)
 add_test(counting_sort counting_sort_tests)
 
+add_executable(radix_sort_tests radix_sort_tests.cpp)
+target_link_libraries(radix_sort_tests PUBLIC
+    gtest_main
+    radix_sort
+)
+set_warning_levels(radix_sort_tests)
+add_test(radix_sort radix_sort_tests)
+
 add_executable(maximal_subarray_tests maximal_subarray_tests.cpp)
 target_link_libraries(maximal_subarray_tests PUBLIC
     gtest_main

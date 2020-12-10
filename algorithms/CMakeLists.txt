@@ -20,6 +20,10 @@ add_library(counting_sort INTERFACE)
 target_compile_features(counting_sort INTERFACE cxx_std_17)
 target_include_directories(counting_sort INTERFACE include/)
 
+add_library(radix_sort INTERFACE)
+target_compile_features(radix_sort INTERFACE cxx_std_17)
+target_include_directories(radix_sort INTERFACE include/)
+
 add_library(maximal_subarray INTERFACE)
 target_compile_features(maximal_subarray INTERFACE cxx_std_17)
 target_include_directories(maximal_subarray INTERFACE include/)
