@@ -5,6 +5,8 @@
 #include <iterator>
 #include <random>
 
+#include <iostream>
+
 namespace mrai
 {
 
@@ -16,16 +18,16 @@ auto partition(Iter begin, Iter end) -> Iter
 {
   auto pivot = std::prev(end, 1);
   auto smaller = begin;
-  auto larger = begin;
+  auto to_inspect = begin;
 
-  while (larger != pivot)
+  while (to_inspect != pivot)
   {
-    if (*larger <= *pivot)
+    if (*to_inspect < *pivot)
     {
-      std::iter_swap(smaller, larger);
+      std::iter_swap(smaller, to_inspect);
       ++smaller;
     }
-    ++larger;
+    ++to_inspect;
   }
   std::iter_swap(smaller, pivot);
 
@@ -46,7 +48,7 @@ auto quicksort_lr(Iter begin, Iter end) -> void
   auto smaller_end = partition(begin, end);
 
   quicksort_lr(begin, smaller_end);
-  quicksort_lr(smaller_end, end);
+  quicksort_lr(++smaller_end, end);
 }
 
 // requires bidirectional iterator
@@ -71,7 +73,7 @@ auto quicksort_random(Iter begin, Iter end) -> void
   auto smaller_end = partition(begin, end);
 
   quicksort_random(begin, smaller_end);
-  quicksort_random(smaller_end, end);
+  quicksort_random(++smaller_end, end);
 }
 
 }  // namespace mrai

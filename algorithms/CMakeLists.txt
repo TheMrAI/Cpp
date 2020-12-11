@@ -29,4 +29,4 @@ target_compile_features(maximal_subarray INTERFACE cxx_std_17)
 target_include_directories(maximal_subarray INTERFACE include/)
 
 add_subdirectory(tests)
-# add_subdirectory(benchmark)
+add_subdirectory(benchmark)

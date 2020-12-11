@@ -1,5 +1,5 @@
 #ifndef ALGORITHMS_HEAP_SORT
-#define ALGORITHMS_HEAP_SPRT
+#define ALGORITHMS_HEAP_SORT
 
 #include <vector>
 #include <algorithm>
