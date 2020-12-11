@@ -8,7 +8,7 @@
 namespace mrai
 {
 
-auto generate_incrementing_sequence(int elements_to_generate) -> std::vector<int>
+auto generate_random_sequence(unsigned elements_to_generate) -> std::vector<int>
 {
   std::random_device random_device{};
   std::mt19937 generator{random_device()};
@@ -17,17 +17,23 @@ auto generate_incrementing_sequence(int elements_to_generate) -> std::vector<int
   std::uniform_int_distribution<> distribution(-range_end, range_end);
 
   auto sequence = std::vector<int>{};
-  for(int generated = 0; generated < elements_to_generate; ++generated)
+  for(unsigned generated = 0; generated < elements_to_generate; ++generated)
   {
     sequence.emplace_back(distribution(generator));
   }
 
+  return sequence;
+}
+
+auto generate_incrementing_sequence(unsigned elements_to_generate) -> std::vector<int>
+{
+  auto sequence = generate_random_sequence(elements_to_generate);
   std::sort(sequence.begin(), sequence.end());
 
   return sequence;
 }
 
-auto generate_random_target(int elements_to_generate) -> int
+auto generate_random_target(unsigned elements_to_generate) -> int
 {
   std::random_device random_device{};
   std::mt19937 generator{random_device()};
