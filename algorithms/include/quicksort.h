@@ -51,7 +51,7 @@ auto quicksort_lr(Iter begin, Iter end) -> void
 
 // requires bidirectional iterator
 template <typename Iter>
-auto quicksort_random(Iter begin, Iter end) ->void
+auto quicksort_random(Iter begin, Iter end) -> void
 {
   auto elements_in_range = std::distance(begin, end);
   if (elements_in_range < 2)
