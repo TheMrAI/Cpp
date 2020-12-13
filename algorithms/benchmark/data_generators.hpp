@@ -8,6 +8,32 @@
 namespace mrai
 {
 
+auto generate_positive_sequence(unsigned elements_to_generate) -> std::vector<unsigned>
+{
+  std::random_device random_device{};
+  std::mt19937 generator{random_device()};
+  // check range
+  std::uniform_int_distribution<> distribution(0, --elements_to_generate);
+
+  auto sequence = std::vector<unsigned>{};
+  for(unsigned generated = 0; generated < elements_to_generate; ++generated)
+  {
+    sequence.emplace_back(distribution(generator));
+  }
+
+  return sequence;
+}
+
+auto generate_random_positive_target(unsigned elements_to_generate) -> unsigned
+{
+  std::random_device random_device{};
+  std::mt19937 generator{random_device()};
+
+  std::uniform_int_distribution<> distribution(0, --elements_to_generate);
+
+  return distribution(generator);
+}
+
 auto generate_random_sequence(unsigned elements_to_generate) -> std::vector<int>
 {
   std::random_device random_device{};
