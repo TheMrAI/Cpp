@@ -58,17 +58,16 @@ static void manual_heapsort(benchmark::State& state)
 
 BENCHMARK(manual_heapsort)->RangeMultiplier(10)->Range(10, 100'000)->Complexity();
 
-/*
-static void quicksort_lr(benchmark::State& state)
+static void quicksort(benchmark::State& state)
 {
   auto input = generate_random_sequence(state.range(0));
   for (auto _ : state)
   {
-    quicksort_lr(input.begin(), input.end());
+    quicksort(input.begin(), input.end());
   }
 }
 
-BENCHMARK(quicksort_lr)->RangeMultiplier(10)->Range(10, 100'000)->Complexity();*/
+BENCHMARK(quicksort)->RangeMultiplier(10)->Range(10, 100'000)->Complexity();
 
 static void quicksort_random(benchmark::State& state)
 {
