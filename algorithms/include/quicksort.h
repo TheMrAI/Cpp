@@ -10,30 +10,6 @@
 namespace mrai
 {
 
-// partition a range between begin and end
-// using the element before end as the pivot
-// begin != end otherwise the behaviour is undefined
-template <typename Iter>
-auto partition(Iter begin, Iter end) -> Iter
-{
-  auto pivot = std::prev(end, 1);
-  auto smaller = begin;
-  auto to_inspect = begin;
-
-  while (to_inspect != pivot)
-  {
-    if (*to_inspect < *pivot)
-    {
-      std::iter_swap(smaller, to_inspect);
-      ++smaller;
-    }
-    ++to_inspect;
-  }
-  std::iter_swap(smaller, pivot);
-
-  return smaller;
-}
-
 // quicksort_of the left and right
 // requires bidirectional iterator
 template <typename Iter>
@@ -44,11 +20,19 @@ auto quicksort_lr(Iter begin, Iter end) -> void
   {
     return;
   }
+  
+  auto last = std::prev(end, 1);
+  auto pivot = std::next(begin, std::distance(begin, end)/2);
+  std::iter_swap(pivot, last);
+  auto pivot_point = std::partition(begin, last, 
+    [last](auto const& element)
+    {   
+      return element < *last;
+    });
+  std::iter_swap(pivot_point, last);
 
-  auto smaller_end = partition(begin, end);
-
-  quicksort_lr(begin, smaller_end);
-  quicksort_lr(++smaller_end, end);
+  quicksort_lr(begin, pivot_point);
+  quicksort_lr(++pivot_point, end);
 }
 
 // requires bidirectional iterator
@@ -66,14 +50,18 @@ auto quicksort_random(Iter begin, Iter end) -> void
   auto distribution = std::uniform_int_distribution<>(0, elements_in_range - 1);
   auto random_step_count = distribution(generator);
 
-  auto pivot = std::next(begin, random_step_count);
   auto last = std::prev(end, 1);
-  std::iter_swap(last, pivot);
+  auto pivot = std::next(begin, random_step_count);
+  std::iter_swap(pivot, last);
+  auto pivot_point = std::partition(begin, last, 
+    [last](auto const& element)
+    {   
+      return element < *last;
+    });
+  std::iter_swap(pivot_point, last);
 
-  auto smaller_end = partition(begin, end);
-
-  quicksort_random(begin, smaller_end);
-  quicksort_random(++smaller_end, end);
+  quicksort_random(begin, pivot_point);
+  quicksort_random(++pivot_point, end);
 }
 
 }  // namespace mrai
