@@ -19,7 +19,6 @@ static void std_sort(benchmark::State& state)
     std::sort(input.begin(), input.end());
   }
 }
-
 BENCHMARK(std_sort)->RangeMultiplier(10)->Range(10, 100'000)->Complexity();
 
 static void merge_sort(benchmark::State& state)
@@ -33,7 +32,6 @@ static void merge_sort(benchmark::State& state)
     merge_sort(input.begin(), input.end(), std::back_inserter(output));
   }
 }
-
 BENCHMARK(merge_sort)->RangeMultiplier(10)->Range(10, 100'000)->Complexity();
 
 static void heapsort(benchmark::State& state)
@@ -44,7 +42,6 @@ static void heapsort(benchmark::State& state)
     heapsort(input.begin(), input.end());
   }
 }
-
 BENCHMARK(heapsort)->RangeMultiplier(10)->Range(10, 100'000)->Complexity();
 
 static void manual_heapsort(benchmark::State& state)
@@ -55,7 +52,6 @@ static void manual_heapsort(benchmark::State& state)
     manual_heapsort(input.begin(), input.end());
   }
 }
-
 BENCHMARK(manual_heapsort)->RangeMultiplier(10)->Range(10, 100'000)->Complexity();
 
 static void quicksort(benchmark::State& state)
@@ -66,7 +62,6 @@ static void quicksort(benchmark::State& state)
     quicksort(input.begin(), input.end());
   }
 }
-
 BENCHMARK(quicksort)->RangeMultiplier(10)->Range(10, 100'000)->Complexity();
 
 static void quicksort_random(benchmark::State& state)
@@ -77,7 +72,6 @@ static void quicksort_random(benchmark::State& state)
     quicksort_random(input.begin(), input.end());
   }
 }
-
 BENCHMARK(quicksort_random)->RangeMultiplier(10)->Range(10, 100'000)->Complexity();
 
 BENCHMARK_MAIN();
