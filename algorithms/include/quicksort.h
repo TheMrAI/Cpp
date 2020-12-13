@@ -35,9 +35,25 @@ auto quicksort(Iter begin, Iter end) -> void
   quicksort(++pivot_point, end);
 }
 
+class RandomPivotPicker
+{
+public:
+  template<typename Iter>
+  auto operator()(Iter begin, Iter end) -> Iter
+  {
+    auto elements_in_range = std::distance(begin, end);
+    auto distribution = std::uniform_int_distribution<>(0, elements_in_range - 1);
+    auto random_step_count = distribution(generator);
+    return std::next(begin, random_step_count);
+  }
+private:
+  std::random_device random_device = std::random_device();
+  std::mt19937 generator = std::mt19937(random_device());
+};
+
 // requires bidirectional iterator
-template <typename Iter>
-auto quicksort_random(Iter begin, Iter end) -> void
+template <typename Iter, typename PickPivot>
+auto quicksort_random(Iter begin, Iter end, PickPivot& picker) -> void
 {
   auto elements_in_range = std::distance(begin, end);
   if (elements_in_range < 2)
@@ -45,13 +61,8 @@ auto quicksort_random(Iter begin, Iter end) -> void
     return;
   }
 
-  auto random_device = std::random_device();
-  auto generator = std::mt19937(random_device());
-  auto distribution = std::uniform_int_distribution<>(0, elements_in_range - 1);
-  auto random_step_count = distribution(generator);
-
   auto last = std::prev(end, 1);
-  auto pivot = std::next(begin, random_step_count);
+  auto pivot = picker(begin, end);
   std::iter_swap(pivot, last);
   auto pivot_point = std::partition(begin, last, 
     [last](auto const& element)
@@ -60,8 +71,8 @@ auto quicksort_random(Iter begin, Iter end) -> void
     });
   std::iter_swap(pivot_point, last);
 
-  quicksort_random(begin, pivot_point);
-  quicksort_random(++pivot_point, end);
+  quicksort_random(begin, pivot_point, picker);
+  quicksort_random(++pivot_point, end, picker);
 }
 
 }  // namespace mrai

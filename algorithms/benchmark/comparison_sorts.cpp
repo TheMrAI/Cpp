@@ -66,10 +66,11 @@ BENCHMARK(quicksort)->RangeMultiplier(10)->Range(10, 100'000)->Complexity();
 
 static void quicksort_random(benchmark::State& state)
 {
+  RandomPivotPicker picker;
   auto input = generate_random_sequence(state.range(0));
   for (auto _ : state)
   {
-    quicksort_random(input.begin(), input.end());
+    quicksort_random(input.begin(), input.end(), picker);
   }
 }
 BENCHMARK(quicksort_random)->RangeMultiplier(10)->Range(10, 100'000)->Complexity();
