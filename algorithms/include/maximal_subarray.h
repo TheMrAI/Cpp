@@ -6,21 +6,20 @@
 
 namespace mrai
 {
-
-template<typename T>
-T kadane(std::vector<T> const& input)
+template <typename T>
+T kadane( std::vector<T> const& input )
 {
   auto maximal_sum{ 0 };
   auto current_sum{ 0 };
 
-  for (const auto element : input)
+  for ( const auto element : input )
   {
     current_sum += element;
-    if (current_sum < 0)
+    if ( current_sum < 0 )
     {
       current_sum = 0;
     }
-    maximal_sum = std::max(maximal_sum, current_sum);
+    maximal_sum = std::max( maximal_sum, current_sum );
   }
 
   return maximal_sum;

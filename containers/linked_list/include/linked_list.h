@@ -23,7 +23,7 @@ public:
     using value_type = T;
     using difference_type = void;
 
-    explicit iterator(list_node* element = nullptr);
+    explicit iterator( list_node* element = nullptr );
     /*iterator(iterator const & rhs);
     iterator(iterator&& rhs);
     iterator& operator++(); // pre increment
@@ -32,10 +32,10 @@ public:
     iterator& operator--(int);
     iterator& operator=(iterator const & rhs);
     iterator& operator=(iterator && rhs);*/
-    auto operator==(iterator const& rhs) const -> bool;
-    auto operator!=(iterator const& rhs) const -> bool;
+    auto operator==( iterator const& rhs ) const -> bool;
+    auto operator!=( iterator const& rhs ) const -> bool;
     auto operator*() -> reference;
-    auto operator-> () -> reference;
+    auto operator->() -> reference;
 
   private:
     list_node* element_;
@@ -57,10 +57,10 @@ public:
   [[nodiscard]] auto size() const noexcept -> size_t;
   [[nodiscard]] auto empty() const noexcept -> bool;
 
-  auto push_back(T const& value) -> void;
-  auto push_back(T&& value) -> void;
-  auto push_front(T const& value) -> void;
-  auto push_front(T&& value) -> void;
+  auto push_back( T const& value ) -> void;
+  auto push_back( T&& value ) -> void;
+  auto push_front( T const& value ) -> void;
+  auto push_front( T&& value ) -> void;
 
   // emplace_back()
   // emplace_front();
@@ -85,12 +85,12 @@ private:
     std::unique_ptr<list_node> next;
     list_node* previous;
 
-    explicit list_node(T const& value);
+    explicit list_node( T const& value );
     ~list_node() = default;
-    list_node(list_node const& rhs) = delete;
-    list_node(list_node&& rhs) noexcept;
-    auto operator=(list_node const&) -> list_node& = delete;
-    auto operator=(list_node&& rhs) noexcept -> list_node&;
+    list_node( list_node const& rhs ) = delete;
+    list_node( list_node&& rhs ) noexcept;
+    auto operator=( list_node const& ) -> list_node& = delete;
+    auto operator=( list_node&& rhs ) noexcept -> list_node&;
   };
 
   std::unique_ptr<list_node> head_;
@@ -99,12 +99,8 @@ private:
 };
 
 template <typename T>
-linked_list<T>::linked_list()
-    : head_{ std::make_unique<list_node>(T{}) },
-      last_{ head_.get() },
-      size_{ 0 }
-{
-}
+linked_list<T>::linked_list(): head_{ std::make_unique<list_node>( T{} ) }, last_{ head_.get() }, size_{ 0 }
+{}
 
 template <typename T>
 [[nodiscard]] auto linked_list<T>::front() -> T&
@@ -143,55 +139,55 @@ template <typename T>
 }
 
 template <typename T>
-auto linked_list<T>::push_back(T const& value) -> void
+auto linked_list<T>::push_back( T const& value ) -> void
 {
   T value_copy{ value };
-  this->push_back(std::move(value_copy));
+  this->push_back( std::move( value_copy ) );
 }
 
 template <typename T>
-auto linked_list<T>::push_back(T&& value) -> void
+auto linked_list<T>::push_back( T&& value ) -> void
 {
-  auto next_node = std::make_unique<list_node>(std::forward<T>(value));
-  if (empty())
+  auto next_node = std::make_unique<list_node>( std::forward<T>( value ) );
+  if ( empty() )
   {
-    next_node->next = std::move(head_);
-    head_ = std::move(next_node);
+    next_node->next = std::move( head_ );
+    head_ = std::move( next_node );
     last_->previous = head_.get();
   }
   else
   {
     next_node->previous = last_->previous;
     last_->previous = next_node.get();
-    next_node->next = std::move(next_node->previous->next);
-    next_node->previous->next = std::move(next_node);
+    next_node->next = std::move( next_node->previous->next );
+    next_node->previous->next = std::move( next_node );
   }
 
   ++size_;
 }
 
 template <typename T>
-auto linked_list<T>::push_front(T const& value) -> void
+auto linked_list<T>::push_front( T const& value ) -> void
 {
   T value_copy{ value };
-  this->push_front(std::move(value_copy));
+  this->push_front( std::move( value_copy ) );
 }
 
 template <typename T>
-auto linked_list<T>::push_front(T&& value) -> void
+auto linked_list<T>::push_front( T&& value ) -> void
 {
-  auto previous_node = std::make_unique<list_node>(std::forward<T>(value));
-  if (empty())
+  auto previous_node = std::make_unique<list_node>( std::forward<T>( value ) );
+  if ( empty() )
   {
-    previous_node->next = std::move(head_);
-    head_ = std::move(previous_node);
+    previous_node->next = std::move( head_ );
+    head_ = std::move( previous_node );
     last_->previous = head_.get();
   }
   else
   {
     head_->previous = previous_node.get();
-    previous_node->next = std::move(head_);
-    head_ = std::move(previous_node);
+    previous_node->next = std::move( head_ );
+    head_ = std::move( previous_node );
   }
 
   ++size_;
@@ -200,13 +196,13 @@ auto linked_list<T>::push_front(T&& value) -> void
 template <typename T>
 auto linked_list<T>::pop_back() -> void
 {
-  if (this->size() <= 1)
+  if ( this->size() <= 1 )
   {
     pop_front();
     return;
   }
   auto* before_last = last_->previous->previous;
-  before_last->next = std::move(last_->previous->next);
+  before_last->next = std::move( last_->previous->next );
   last_->previous = before_last;
 
   --size_;
@@ -215,75 +211,70 @@ auto linked_list<T>::pop_back() -> void
 template <typename T>
 auto linked_list<T>::pop_front() -> void
 {
-  if (empty())
+  if ( empty() )
   {
     return;
   }
 
-  head_ = std::move(head_->next);
+  head_ = std::move( head_->next );
   head_->previous = nullptr;
 
   --size_;
 }
 
 template <typename T>
-linked_list<T>::iterator::iterator(linked_list<T>::list_node* element)
-    : element_{ element }
-{
-}
+linked_list<T>::iterator::iterator( linked_list<T>::list_node* element ): element_{ element }
+{}
 
 template <typename T>
 auto linked_list<T>::begin() -> linked_list<T>::iterator
 {
-  return linked_list<T>::iterator(head_.get());
+  return linked_list<T>::iterator( head_.get() );
 }
 
 template <typename T>
 auto linked_list<T>::end() -> linked_list<T>::iterator
 {
-  return linked_list<T>::iterator(last_);
+  return linked_list<T>::iterator( last_ );
 }
 
 template <typename T>
-linked_list<T>::list_node::list_node(T const& value)
-    : data{ value }, next{ nullptr }, previous{ nullptr }
+linked_list<T>::list_node::list_node( T const& value ): data{ value }, next{ nullptr }, previous{ nullptr }
+{}
+
+template <typename T>
+linked_list<T>::list_node::list_node( linked_list<T>::list_node&& rhs ) noexcept
 {
+  *this = std::move( rhs );
 }
 
 template <typename T>
-linked_list<T>::list_node::list_node(linked_list<T>::list_node&& rhs) noexcept
+auto linked_list<T>::list_node::operator=( list_node&& rhs ) noexcept -> linked_list<T>::list_node&
 {
-  *this = std::move(rhs);
-}
-
-template <typename T>
-auto linked_list<T>::list_node::operator=(list_node&& rhs) noexcept
-    -> linked_list<T>::list_node&
-{
-  std::swap(this->data, rhs.data);
-  std::swap(this->next, rhs.next);
-  std::swap(this->previous, rhs.previous);
+  std::swap( this->data, rhs.data );
+  std::swap( this->next, rhs.next );
+  std::swap( this->previous, rhs.previous );
   return *this;
 }
 
 template <typename T>
-auto linked_list<T>::iterator::operator==(iterator const& rhs) const -> bool
+auto linked_list<T>::iterator::operator==( iterator const& rhs ) const -> bool
 {
   return this->element_ == rhs.element_;
 }
 
 template <typename T>
-auto linked_list<T>::iterator::operator!=(iterator const& rhs) const -> bool
+auto linked_list<T>::iterator::operator!=( iterator const& rhs ) const -> bool
 {
-  return !(*this == rhs);
+  return !( *this == rhs );
 }
 
 template <typename T>
 auto linked_list<T>::iterator::operator*() -> reference
 {
-  if constexpr (std::is_pointer<T>())
+  if constexpr ( std::is_pointer<T>() )
   {
-    return *(element_->data);
+    return *( element_->data );
   }
   else
   {
@@ -292,7 +283,7 @@ auto linked_list<T>::iterator::operator*() -> reference
 }
 
 template <typename T>
-auto linked_list<T>::iterator::operator-> () -> reference
+auto linked_list<T>::iterator::operator->() -> reference
 {
   return element_->data;
 }

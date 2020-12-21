@@ -7,17 +7,17 @@ constexpr double resolution{ 4.0 };
 class Page
 {
 public:
-  Page(unsigned W, unsigned H): W{ W }, H{ H }
+  Page( unsigned W, unsigned H ): W{ W }, H{ H }
   {
-    page = std::make_unique<char[]>(W * H);
+    page = std::make_unique<char[]>( W * H );
     clear();
   }
 
-  Page(const Page&) = delete;
-  Page(Page&&) = delete;
+  Page( const Page& ) = delete;
+  Page( Page&& ) = delete;
 
-  auto operator=(const Page&) -> Page& = delete;
-  auto operator=(Page &&) -> Page& = delete;
+  auto operator=( const Page& ) -> Page& = delete;
+  auto operator=( Page && ) -> Page& = delete;
 
   ~Page() = default;
 
@@ -31,36 +31,36 @@ public:
     return H;
   }
 
-  auto setchar(unsigned y, unsigned x, char c) -> bool
+  auto setchar( unsigned y, unsigned x, char c ) -> bool
   {
-    if (y >= H || x >= W)
+    if ( y >= H || x >= W )
     {
       return false;
     }
-    page[(y * W) + x] = c;
+    page[( y * W ) + x] = c;
     return true;
   }
 
   auto clear() -> void
   {
-    for (unsigned y = 0; y < H; ++y)
+    for ( unsigned y = 0; y < H; ++y )
     {
-      for (unsigned x = 0; x < W; ++x)
+      for ( unsigned x = 0; x < W; ++x )
       {
-        setchar(y, x, ' ');
+        setchar( y, x, ' ' );
       }
     }
   }
 
   auto print() const -> void
   {
-    for (unsigned y = 0; y < H; ++y)
+    for ( unsigned y = 0; y < H; ++y )
     {
-      for (unsigned x = 0; x < W; ++x)
+      for ( unsigned x = 0; x < W; ++x )
       {
-        putchar(page[(y * W) + x]);
+        putchar( page[( y * W ) + x] );
       }
-      putchar('\n');
+      putchar( '\n' );
     }
   }
 
@@ -70,18 +70,18 @@ private:
   std::unique_ptr<char[]> page;
 };
 
-auto plot(Page& page, char c, double (*f)(double)) -> void
+auto plot( Page& page, char c, double ( *f )( double ) ) -> void
 {
-  for (unsigned x = 0; x < page.width(); ++x)
+  for ( unsigned x = 0; x < page.width(); ++x )
   {
-    double x_offset = std::floor(page.width() / 2);
-    double fx = (x - x_offset) / resolution;
-    double fy = f(fx);
-    double y_offset = std::floor(page.height() / 2);
-    unsigned y = static_cast<unsigned>((fy * resolution) * -1 + y_offset);
-    if (y < page.height())
+    double x_offset = std::floor( page.width() / 2 );
+    double fx = ( x - x_offset ) / resolution;
+    double fy = f( fx );
+    double y_offset = std::floor( page.height() / 2 );
+    unsigned y = static_cast<unsigned>( ( fy * resolution ) * -1 + y_offset );
+    if ( y < page.height() )
     {
-      page.setchar(y, x, c);
+      page.setchar( y, x, c );
     }
   }
 }
@@ -89,21 +89,21 @@ auto plot(Page& page, char c, double (*f)(double)) -> void
 class FunctionCall
 {
 public:
-  virtual auto operator()(double) const -> double = 0;
+  virtual auto operator()( double ) const -> double = 0;
 };
 
-void plot(Page& page, char c, FunctionCall const& f)
+void plot( Page& page, char c, FunctionCall const& f )
 {
-  for (unsigned x = 0; x < page.width(); ++x)
+  for ( unsigned x = 0; x < page.width(); ++x )
   {
-    double x_offset = std::floor(page.width() / 2);
-    double fx = (x - x_offset) / resolution;
-    double fy = f(fx);
-    double y_offset = std::floor(page.height() / 2);
-    unsigned y = static_cast<unsigned>((fy * resolution) * -1 + y_offset);
-    if (y < page.height())
+    double x_offset = std::floor( page.width() / 2 );
+    double fx = ( x - x_offset ) / resolution;
+    double fy = f( fx );
+    double y_offset = std::floor( page.height() / 2 );
+    unsigned y = static_cast<unsigned>( ( fy * resolution ) * -1 + y_offset );
+    if ( y < page.height() )
     {
-      page.setchar(y, x, c);
+      page.setchar( y, x, c );
     }
   }
 }
@@ -111,13 +111,12 @@ void plot(Page& page, char c, FunctionCall const& f)
 class Sin_times_d: public FunctionCall
 {
 public:
-  explicit Sin_times_d(double d): d{ d }
-  {
-  }
+  explicit Sin_times_d( double d ): d{ d }
+  {}
 
-  auto operator()(double x) const -> double override
+  auto operator()( double x ) const -> double override
   {
-    return sin(d * x);
+    return sin( d * x );
   }
 
 private:
@@ -135,8 +134,8 @@ auto main() -> int
   std::cin >> d;
   Sin_times_d sin_d{ d };
 
-  plot(page, '.', sin_d);
-  plot(page, '+', cos);
+  plot( page, '.', sin_d );
+  plot( page, '+', cos );
 
   page.print();
 }
