@@ -24,13 +24,21 @@ target_link_libraries(merge_sort_tests PUBLIC
 set_warning_levels(merge_sort_tests)
 add_test(merge_sort merge_sort_tests)
 
-add_executable(quick_sort_tests quick_sort_tests.cpp)
-target_link_libraries(quick_sort_tests PUBLIC
+add_executable(quicksort_tests quicksort_tests.cpp)
+target_link_libraries(quicksort_tests PUBLIC
     gtest_main
-    quick_sort
+    quicksort
 )
-set_warning_levels(quick_sort_tests)
-add_test(quick_sort quick_sort_tests)
+set_warning_levels(quicksort_tests)
+add_test(quicksort quicksort_tests)
+
+add_executable(counting_sort_tests counting_sort_tests.cpp)
+target_link_libraries(counting_sort_tests PUBLIC
+    gtest_main
+    counting_sort
+)
+set_warning_levels(counting_sort_tests)
+add_test(counting_sort counting_sort_tests)
 
 add_executable(maximal_subarray_tests maximal_subarray_tests.cpp)
 target_link_libraries(maximal_subarray_tests PUBLIC
