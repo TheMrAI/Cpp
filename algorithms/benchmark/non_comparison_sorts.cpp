@@ -1,6 +1,5 @@
 #include <benchmark/benchmark.h>
 #include "counting_sort.h"
-#include "radix_sort.h"
 
 #include <algorithm>
 #include <iterator>
@@ -19,15 +18,5 @@ static void counting_sort(benchmark::State& state)
   }
 }
 BENCHMARK(counting_sort)->RangeMultiplier(10)->Range(10, 100'000)->Complexity();
-
-static void radix_sort(benchmark::State& state)
-{
-  auto input = generate_positive_sequence(state.range(0));
-  for (auto _ : state)
-  {
-    radix_sort(input);
-  }
-}
-BENCHMARK(radix_sort)->RangeMultiplier(10)->Range(10, 100'000)->Complexity();
 
 BENCHMARK_MAIN();
