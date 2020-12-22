@@ -11,7 +11,7 @@ public:
   Noisy( Noisy const& rhs );
   Noisy( Noisy&& rhs ) noexcept;
   auto operator=( Noisy const& rhs ) -> Noisy&;
-  auto operator=( Noisy&& rhs ) -> Noisy&;
+  auto operator=( Noisy&& rhs ) noexcept -> Noisy&;
 };
 
 auto create_noisy_on_return() -> Noisy;

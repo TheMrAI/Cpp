@@ -11,6 +11,7 @@ auto main() -> int
   {
     auto result = 0;  // must use int as gcc 9.2 or clang 9.0.0-2 don't support
                       // std::chars_format
+    // NOLINTNEXTLINE
     auto [ignore, error_code] = std::from_chars( word.data(), word.data() + word.size(), result );
     if ( error_code == std::errc{} )
     {

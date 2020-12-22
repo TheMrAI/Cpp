@@ -21,9 +21,9 @@ public:
   Parabola( double a, double b, double c ): a_{ a }, b_{ b }, c_{ c }
   {}
 
-  auto operator()( double x ) -> double
+  auto operator()( double x ) const -> double
   {
-    return a_ * std::pow( x, 2.0 ) + b_ * x + c_;
+    return a_ * std::pow( x, 2.0 ) + b_ * x + c_;  // NOLINT
   }
 
 private:
@@ -38,7 +38,7 @@ class Derival
 public:
   using callable = std::function<RETURN( ARGUMENT )>;
 
-  Derival( callable function ): function_{ function }
+  explicit Derival( callable function ): function_{ std::move( function ) }
   {}
 
   auto operator()( ARGUMENT x ) -> RETURN
@@ -56,19 +56,19 @@ auto main() -> int
   Derival<double, double> my_cos{ sin };
 
   constexpr auto PI = 3.1415;
-  const auto diferential_quotient = 0.1;
-  for ( double f = 0; f < PI; f += diferential_quotient )
+  auto const diferential_quotient = 0.1;
+  for ( double f = 0; f < PI; f += diferential_quotient )  // NOLINT
   {
-    std::cout << std::setw( 20 ) << my_cos( f ) - cos( f ) << std::endl;  // should be close to zero
+    std::cout << std::setw( 20 ) << my_cos( f ) - cos( f ) << std::endl;  // NOLINT // should be close to zero
   }
 
-  Parabola p1{ 0.5, 2.3, -5 }; /* 0.5x^2 + 2.3x - 5 */
+  Parabola p1{ 0.5, 2.3, -5 };  // NOLINT /* 0.5x^2 + 2.3x - 5 */
   Derival<double, double> p1_der{ p1 };
 
-  Parabola p2{ 0, 1, 2.3 }; /* x + 2.3, p1 derivative */
-  for ( double f = 0; f < 3.0; f += 0.1 )
+  Parabola p2{ 0, 1, 2.3 };                // NOLINT /* x + 2.3, p1 derivative */
+  for ( double f = 0; f < 3.0; f += 0.1 )  // NOLINT
   {
-    std::cout << std::setw( 20 ) << p1_der( f ) - p2( f ) << std::endl;  // should be close to zero
+    std::cout << std::setw( 20 ) << p1_der( f ) - p2( f ) << std::endl;  // NOLINT // should be close to zero
   }
 
   return 0;
