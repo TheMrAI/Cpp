@@ -35,12 +35,14 @@ def stage_files(file_names: List[str]) -> None:
     for file_name in file_names:
         subprocess.run(['git', 'add', file_name])
 
+def autoformat(target_type: str, re_stage: bool) -> None:
+    files = collect_files(target_type)
+    format_files(files)
+    if re_stage:
+        stage_files(files)
 
 def main(arguments: argparse.Namespace) -> int:
-    files = collect_files(arguments.targets)
-    format_files(files)
-    if arguments.stage:
-        stage_files(files)
+    autoformat(arguments.targets, arguments.stage)
     return 0
 
 
