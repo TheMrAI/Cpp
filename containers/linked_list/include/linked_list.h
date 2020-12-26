@@ -23,7 +23,7 @@ public:
     using value_type = T;
     using difference_type = void;
 
-    explicit iterator( list_node* element = nullptr );
+    explicit iterator( list_node* element = nullptr);
     /*iterator(iterator const & rhs);
     iterator(iterator&& rhs);
     iterator& operator++(); // pre increment
@@ -37,11 +37,11 @@ public:
     auto operator*() -> reference;
     auto operator->() -> reference;
 
-  private:
-    list_node* element_;
-  };
+    private:
+      list_node* element_{nullptr};
+    };
 
-  linked_list();
+  linked_list() = default;
   /*
   linked_list(const linked_list& rhs);
   linked_list(linked_list&& rhs);
@@ -81,9 +81,9 @@ public:
 private:
   struct list_node
   {
-    T data;
-    std::unique_ptr<list_node> next;
-    list_node* previous;
+    T data; //NOLINT
+    std::unique_ptr<list_node> next; //NOLINT
+    list_node* previous; //NOLINT
 
     explicit list_node( T const& value );
     ~list_node() = default;
@@ -93,14 +93,10 @@ private:
     auto operator=( list_node&& rhs ) noexcept -> list_node&;
   };
 
-  std::unique_ptr<list_node> head_;
-  list_node* last_;
-  size_t size_;
+  std::unique_ptr<list_node> head_{std::make_unique<list_node>( T{} )};
+  list_node* last_{head_.get()};
+  size_t size_{0};
 };
-
-template <typename T>
-linked_list<T>::linked_list(): head_{ std::make_unique<list_node>( T{} ) }, last_{ head_.get() }, size_{ 0 }
-{}
 
 template <typename T>
 [[nodiscard]] auto linked_list<T>::front() -> T&
