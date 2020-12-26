@@ -32,7 +32,7 @@ private:
   };
 
 public:
-  explicit rb_tree( const Compare& comparator = Compare() );
+  explicit rb_tree( Compare const& comparator = Compare() );
 
   class const_iterator
   {
@@ -48,7 +48,7 @@ public:
     /*auto operator=(const const_iterator& rhs) -> const_iterator&;
     auto operator=(const_iterator&& rhs) -> const_iterator&;
     */
-    auto operator==( const const_iterator& rhs ) const -> bool;
+    auto operator==( const_iterator const& rhs ) const -> bool;
     /*auto operator++() -> const_iterator&;
     auto operator++(int) -> const_iterator&;
     auto operator--() -> const_iterator&;
@@ -80,7 +80,7 @@ public:
   auto erase() -> void;*/
 private:
   Compare comparator_{};
-  std::size_t size_{0};
+  std::size_t size_{ 0 };
   std::unique_ptr<red_black_node> root_;
 };
 
@@ -89,7 +89,7 @@ rb_tree<Key, Compare>::const_iterator::const_iterator( red_black_node* element )
 {}
 
 template <typename Key, typename Compare>
-rb_tree<Key, Compare>::const_iterator::const_iterator( const const_iterator& rhs )
+rb_tree<Key, Compare>::const_iterator::const_iterator( const_iterator const& rhs )
 {
   element_ = rhs.element;
 }
@@ -101,7 +101,7 @@ rb_tree<Key, Compare>::const_iterator::const_iterator( const_iterator&& rhs ) no
 }
 
 template <typename Key, typename Compare>
-auto rb_tree<Key, Compare>::const_iterator::operator==( const const_iterator& rhs ) const -> bool
+auto rb_tree<Key, Compare>::const_iterator::operator==( const_iterator const& rhs ) const -> bool
 {
   // comparing only the pointers, if they both null it's okay
   // if they point to the exact same object it is okay as well
