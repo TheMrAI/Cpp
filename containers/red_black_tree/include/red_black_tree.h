@@ -43,8 +43,8 @@ public:
     using value_type = Key;
     using difference_type = void;
 
-    const_iterator( const const_iterator& rhs );
-    const_iterator( const_iterator&& rhs );
+    const_iterator( const_iterator const& rhs );
+    const_iterator( const_iterator&& rhs ) noexcept;
     /*auto operator=(const const_iterator& rhs) -> const_iterator&;
     auto operator=(const_iterator&& rhs) -> const_iterator&;
     */
@@ -68,8 +68,8 @@ public:
   auto cbegin() -> const_iterator;
   auto cend() -> const_iterator;
 
-  auto empty() const noexcept -> bool;
-  auto size() const noexcept -> size_t;
+  [[nodiscard]] auto empty() const noexcept -> bool;
+  [[nodiscard]] auto size() const noexcept -> size_t;
 
   /*
   auto clear() -> void;
@@ -79,8 +79,8 @@ public:
   auto insert() -> std::pair<const_iterator, bool>;
   auto erase() -> void;*/
 private:
-  Compare comparator_;
-  std::size_t size_;
+  Compare comparator_{};
+  std::size_t size_{0};
   std::unique_ptr<red_black_node> root_;
 };
 
@@ -95,7 +95,7 @@ rb_tree<Key, Compare>::const_iterator::const_iterator( const const_iterator& rhs
 }
 
 template <typename Key, typename Compare>
-rb_tree<Key, Compare>::const_iterator::const_iterator( const_iterator&& rhs )
+rb_tree<Key, Compare>::const_iterator::const_iterator( const_iterator&& rhs ) noexcept
 {
   std::swap( element_, rhs.element_ );
 }
@@ -121,7 +121,7 @@ auto rb_tree<Key, Compare>::const_iterator::operator->() -> pointer
 }
 
 template <typename Key, typename Compare>
-rb_tree<Key, Compare>::rb_tree( const Compare& comparator ): comparator_{ comparator }, size_{ 0 }
+rb_tree<Key, Compare>::rb_tree( Compare const& comparator ): comparator_{ comparator }
 {}
 
 template <typename Key, typename Compare>
