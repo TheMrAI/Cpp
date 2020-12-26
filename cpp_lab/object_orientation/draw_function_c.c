@@ -16,9 +16,9 @@ void plot( int H, int W, char page[H][W], char c, double ( *f )( double ) )
 {
   for ( int x = 0; x < W; ++x )
   {
-    double fx = ( x - W / 2 ) / 4.0;
+    double fx = ( x - W / 2 ) / 4.0;  // NOLINT
     double fy = f( fx );
-    int y = ( fy * 4.0 ) + H / 2;
+    int y = ( fy * 4.0 ) + H / 2;  // NOLINT
     if ( y >= 0 && y < H )
     {
       page[y][x] = c;
@@ -30,9 +30,8 @@ void plot_with_d( int H, int W, char page[H][W], char c, double ( *f )( double, 
 {
   for ( int x = 0; x < W; ++x )
   {
-    // double fx = (x - W / 2) / 4.0;
     double fy = f( x, d );
-    int y = ( fy * 4.0 ) + H / 2;
+    int y = ( fy * 4.0 ) + H / 2;  // NOLINT
     if ( y >= 0 && y < H )
     {
       page[y][x] = c;
@@ -59,18 +58,18 @@ double sin_times_d( double x, double d )
 
 int main()
 {
-  int H;
-  int W;
+  int H = 80;   // NOLINT
+  int W = 200;  // NOLINT
   printf( "page height H = ?\n" );
-  scanf( "%d", &H );
+  scanf( "%d", &H );  // NOLINT
   printf( "page width W = ?\n" );
-  scanf( "%d", &W );
+  scanf( "%d", &W );  // NOLINT
   char page[H][W];
 
   clear( H, W, page );
   printf( "sin(d * x), d = ?\n" );
-  double d;
-  scanf( "%lf", &d );
+  double d = 0;
+  scanf( "%lf", &d );  // NOLINT
 
   plot_with_d( H, W, page, '.', sin_times_d, d );
   plot( H, W, page, '+', sin );

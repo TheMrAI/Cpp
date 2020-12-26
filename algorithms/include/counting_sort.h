@@ -10,7 +10,7 @@ namespace mrai
 {
 // specifyining a max_value smaller than the actual maximum value present in
 // the input vector causes undefined behaviour
-auto counting_sort( std::vector<unsigned> const& input, unsigned max_value ) -> std::vector<unsigned>
+inline auto counting_sort( std::vector<unsigned> const& input, unsigned max_value ) -> std::vector<unsigned>
 {
   auto sorted_result = std::vector<unsigned>( input.size() );
   if ( input.empty() )

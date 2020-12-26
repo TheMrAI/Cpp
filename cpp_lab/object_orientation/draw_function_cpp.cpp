@@ -9,7 +9,7 @@ class Page
 public:
   Page( unsigned W, unsigned H ): W{ W }, H{ H }
   {
-    page = std::make_unique<char[]>( W * H );
+    page = std::make_unique<char[]>( W * H );  // NOLINT
     clear();
   }
 
@@ -67,7 +67,7 @@ public:
 private:
   unsigned W;
   unsigned H;
-  std::unique_ptr<char[]> page;
+  std::unique_ptr<char[]> page;  // NOLINT
 };
 
 auto plot( Page& page, char c, double ( *f )( double ) ) -> void
@@ -78,7 +78,7 @@ auto plot( Page& page, char c, double ( *f )( double ) ) -> void
     double fx = ( x - x_offset ) / resolution;
     double fy = f( fx );
     double y_offset = std::floor( page.height() / 2 );
-    unsigned y = static_cast<unsigned>( ( fy * resolution ) * -1 + y_offset );
+    auto y = static_cast<unsigned>( ( fy * resolution ) * -1 + y_offset );
     if ( y < page.height() )
     {
       page.setchar( y, x, c );
@@ -100,7 +100,7 @@ void plot( Page& page, char c, FunctionCall const& f )
     double fx = ( x - x_offset ) / resolution;
     double fy = f( fx );
     double y_offset = std::floor( page.height() / 2 );
-    unsigned y = static_cast<unsigned>( ( fy * resolution ) * -1 + y_offset );
+    auto y = static_cast<unsigned>( ( fy * resolution ) * -1 + y_offset );
     if ( y < page.height() )
     {
       page.setchar( y, x, c );
@@ -125,12 +125,14 @@ private:
 
 auto main() -> int
 {
-  Page page{ 80, 20 };
+  unsigned const width = 80;
+  unsigned const height = 20;
+  Page page{ width, height };
 
   page.clear();
 
   std::cout << "sin(d * x), d = ?\n";
-  double d;
+  double d = 0.0;
   std::cin >> d;
   Sin_times_d sin_d{ d };
 

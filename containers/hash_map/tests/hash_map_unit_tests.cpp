@@ -33,7 +33,7 @@ TEST_F( default_constructed_hash_map, erase_returns_zero )
 
 TEST_F( default_constructed_hash_map, at_throws_out_of_range )
 {
-  ASSERT_THROW( { map.at( 3 ); }, std::out_of_range );
+  ASSERT_THROW( { auto _ = map.at( 3 ); }, std::out_of_range );
 }
 
 TEST_F( default_constructed_hash_map, contains_returns_false )

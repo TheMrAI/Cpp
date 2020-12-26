@@ -7,7 +7,7 @@
 namespace mrai
 {
 template <typename T>
-T kadane( std::vector<T> const& input )
+auto kadane( std::vector<T> const& input ) -> T
 {
   auto maximal_sum{ 0 };
   auto current_sum{ 0 };

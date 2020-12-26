@@ -25,7 +25,7 @@ private:
 
   [[nodiscard]] auto improve( double guess ) const -> double
   {
-    return ( guess + x_ / guess ) / 2.0;
+    return ( guess + x_ / guess ) / 2.0;  // NOLINT
   }
 
   double x_{ 0.0 };

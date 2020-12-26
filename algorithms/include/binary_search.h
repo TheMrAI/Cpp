@@ -10,14 +10,7 @@ auto recursive_binary_search( Iter begin, Iter end, int target ) -> bool
 {
   if ( std::distance( begin, end ) <= 1 )
   {
-    if ( begin != end && *begin == target )
-    {
-      return true;
-    }
-    else
-    {
-      return false;
-    }
+    return begin != end && *begin == target;
   }
 
   auto middle_element_offset = static_cast<std::size_t>( std::distance( begin, end ) / 2 );
@@ -27,7 +20,7 @@ auto recursive_binary_search( Iter begin, Iter end, int target ) -> bool
   {
     return recursive_binary_search( begin, middle, target );
   }
-  else
+  else  // NOLINT
   {
     return recursive_binary_search( middle, end, target );
   }
@@ -55,14 +48,7 @@ auto sequential_binary_search( Iter begin, Iter end, int target ) -> bool
     }
   }
 
-  if ( *begin == target )
-  {
-    return true;
-  }
-  else
-  {
-    return false;
-  }
+  return *begin == target;
 }
 
 }  // namespace mrai

@@ -6,6 +6,11 @@ public:
   Element(): previous{ nullptr }, next{ nullptr }
   {}
 
+  Element( Element const& ) = delete;
+  Element( Element&& ) = default;
+  auto operator=( Element const& ) -> Element& = delete;
+  auto operator=( Element && ) -> Element& = default;
+
   virtual ~Element()
   {
     delete next;
@@ -13,8 +18,8 @@ public:
 
   virtual void process( unsigned value ) = 0;
 
-  Element* previous;
-  Element* next;
+  Element* previous;  // NOLINT
+  Element* next;      // NOLINT
 };
 
 class Dummy final: public Element
@@ -51,7 +56,7 @@ public:
   void process( unsigned value ) override
   {
     std::cout << value << std::endl;
-    auto* sieve = new Sieve( value );
+    auto* sieve = new Sieve( value );  // NOLINT
     sieve->next = this;
     sieve->previous = previous;
     previous->next = sieve;
@@ -62,12 +67,13 @@ public:
 auto main() -> int
 {
   auto start_element = Dummy();
-  auto* bucket = new Bucket();
+  auto* bucket = new Bucket();  // NOLINT
 
   start_element.next = bucket;
   bucket->previous = &start_element;
 
-  for ( unsigned i = 2; i < 150; ++i )
+  unsigned const check_until = 150;
+  for ( unsigned i = 2; i < check_until; ++i )
   {
     start_element.process( i );
   }
