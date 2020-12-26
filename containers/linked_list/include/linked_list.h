@@ -23,7 +23,7 @@ public:
     using value_type = T;
     using difference_type = void;
 
-    explicit iterator( list_node* element = nullptr);
+    explicit iterator( list_node* element = nullptr );
     /*iterator(iterator const & rhs);
     iterator(iterator&& rhs);
     iterator& operator++(); // pre increment
@@ -37,9 +37,9 @@ public:
     auto operator*() -> reference;
     auto operator->() -> reference;
 
-    private:
-      list_node* element_{nullptr};
-    };
+  private:
+    list_node* element_{ nullptr };
+  };
 
   linked_list() = default;
   /*
@@ -81,9 +81,9 @@ public:
 private:
   struct list_node
   {
-    T data; //NOLINT
-    std::unique_ptr<list_node> next; //NOLINT
-    list_node* previous; //NOLINT
+    T data;                           // NOLINT
+    std::unique_ptr<list_node> next;  // NOLINT
+    list_node* previous;              // NOLINT
 
     explicit list_node( T const& value );
     ~list_node() = default;
@@ -93,9 +93,9 @@ private:
     auto operator=( list_node&& rhs ) noexcept -> list_node&;
   };
 
-  std::unique_ptr<list_node> head_{std::make_unique<list_node>( T{} )};
-  list_node* last_{head_.get()};
-  size_t size_{0};
+  std::unique_ptr<list_node> head_{ std::make_unique<list_node>( T{} ) };
+  list_node* last_{ head_.get() };
+  size_t size_{ 0 };
 };
 
 template <typename T>
