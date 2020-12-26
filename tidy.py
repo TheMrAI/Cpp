@@ -17,8 +17,8 @@ def collect_files(target_type: str) -> List[str]:
 
     files_to_format = []
     for file_path in file_candidates.stdout.splitlines():
-        _, extension = os.path.splitext(file_path)
-        if extension in {'.cpp', '.cc', '.CC', '.c', '.hpp', '.h', '.H'}:
+        file_name, extension = os.path.splitext(file_path)
+        if extension in {'.cpp', '.cc', '.CC', '.c', '.hpp', '.h', '.H'} and 'test' not in file_name:
             files_to_format.append(file_path)
 
     return files_to_format
