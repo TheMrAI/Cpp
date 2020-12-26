@@ -13,7 +13,7 @@ auto trie_node::is_word() const -> bool
   return is_word_;
 }
 
-auto insert_word( trie_node& root_node, const std::string_view word ) -> trie_node&
+auto insert_word( trie_node& root_node, std::string_view const word ) -> trie_node&
 {
   auto* walker = &root_node;
   for ( const auto& character : word )
@@ -28,14 +28,14 @@ auto insert_word( trie_node& root_node, const std::string_view word ) -> trie_no
   return *walker;
 }
 
-auto delete_word_recursively( trie_node& root_node, const std::string_view word ) -> void
+auto delete_word_recursively( trie_node& root_node, std::string_view const word ) -> void
 {
-  if ( word.size() == 0 )
+  if ( word.empty() )
   {
     return;
   }
   auto character = word[0];
-  if ( !root_node.possible_paths_.count( character ) )
+  if ( root_node.possible_paths_.count( character ) == 0U )
   {
     return;
   }
@@ -53,14 +53,13 @@ auto delete_word_recursively( trie_node& root_node, const std::string_view word 
 
   delete_word_recursively( *child_node, std::string_view{ word.data() + 1, word.size() - 1 } );
 
-  if ( child_node->possible_paths_.size() == 0 && !child_node->is_word() )
+  if ( child_node->possible_paths_.empty() && !child_node->is_word() )
   {
     root_node.possible_paths_.erase( character );
   }
-  return;
 }
 
-auto words_from_node( std::string current_word, const trie_node& node, std::vector<std::string>& words ) -> void
+auto words_from_node( std::string const& current_word, trie_node const& node, std::vector<std::string>& words ) -> void
 {
   if ( node.is_word() )
   {
@@ -68,16 +67,16 @@ auto words_from_node( std::string current_word, const trie_node& node, std::vect
   }
   for ( const auto& entry : node.possible_paths_ )
   {
-    words_from_node( current_word + entry.first, *entry.second.get(), words );
+    words_from_node( current_word + entry.first, *entry.second, words );
   }
 }
 
-auto words_from_node( const trie_node& root_node ) -> std::vector<std::string>
+auto words_from_node( trie_node const& root_node ) -> std::vector<std::string>
 {
   auto words = std::vector<std::string>{};
-  for ( const auto& entry : root_node.possible_paths_ )
+  for ( auto const& entry : root_node.possible_paths_ )
   {
-    words_from_node( std::string( 1, entry.first ), *entry.second.get(), words );
+    words_from_node( std::string( 1, entry.first ), *entry.second, words );
   }
   return words;
 }
