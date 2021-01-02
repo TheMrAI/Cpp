@@ -39,14 +39,14 @@ auto inline lcs_recursive( std::string const& word_a, std::string const& word_b 
 auto inline lcs_recursive_impl_with_memoization( std::string const& word_a, std::string const& word_b, size_t index_a,
                                                  size_t index_b, std::vector<std::vector<int>>& memoized ) -> size_t
 {
+  if ( memoized[index_a][index_b] != -1 )
+  {
+    return memoized[index_a][index_b];
+  }
   if ( index_a == 0 || index_b == 0 )
   {
     memoized[index_a][index_b] = 0;
     return 0;
-  }
-  if ( memoized[index_a][index_b] != -1 )
-  {
-    return memoized[index_a][index_b];
   }
   if ( word_a[index_a - 1] == word_b[index_b - 1] )
   {
@@ -54,8 +54,11 @@ auto inline lcs_recursive_impl_with_memoization( std::string const& word_a, std:
     memoized[index_a][index_b] = value;
     return value;
   }
-  return std::max( lcs_recursive_impl_with_memoization( word_a, word_b, index_a, index_b - 1, memoized ),
-                   lcs_recursive_impl_with_memoization( word_a, word_b, index_a - 1, index_b, memoized ) );
+
+  auto value = std::max( lcs_recursive_impl_with_memoization( word_a, word_b, index_a, index_b - 1, memoized ),
+                         lcs_recursive_impl_with_memoization( word_a, word_b, index_a - 1, index_b, memoized ) );
+  memoized[index_a][index_b] = value;
+  return value;
 }
 
 auto inline lcs_memoized_recursive( std::string const& word_a, std::string const& word_b ) -> size_t

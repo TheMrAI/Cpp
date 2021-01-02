@@ -22,3 +22,10 @@ target_link_libraries(non_comparison_sorts_bench PUBLIC
     algorithms
 )
 set_warning_levels(non_comparison_sorts_bench)
+
+add_executable(dynamic_programming_bench dynamic_programming.cpp)
+target_link_libraries(dynamic_programming_bench PUBLIC
+    benchmark::benchmark
+    algorithms
+)
+set_warning_levels(dynamic_programming_bench)

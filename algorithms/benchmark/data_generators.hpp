@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <random>
+#include <string>
 #include <vector>
 
 namespace mrai
@@ -67,6 +68,20 @@ auto generate_random_target( unsigned elements_to_generate ) -> int
   std::uniform_int_distribution<> distribution( -range_end, range_end );
 
   return distribution( generator );
+}
+
+auto generate_random_string_of_length( size_t length ) -> std::string
+{
+  std::random_device random_device{};
+  std::mt19937 generator{ random_device() };
+  std::uniform_int_distribution<> distribution( 65, 90 );
+
+  auto random_string = std::string{};
+  for ( size_t counter = 0; counter < length; ++counter )
+  {
+    random_string.push_back( static_cast<char>( distribution( generator ) ) );
+  }
+  return random_string;
 }
 
 }  // namespace mrai
