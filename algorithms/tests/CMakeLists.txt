@@ -47,3 +47,11 @@ target_link_libraries(maximal_subarray_tests PUBLIC
 )
 set_warning_levels(maximal_subarray_tests)
 add_test(maximal_subarray maximal_subarray_tests)
+
+add_executable(dynamic_programming_tests dynamic_programming_tests.cpp)
+target_link_libraries(dynamic_programming_tests PUBLIC
+    gtest_main
+    dynamic_programming
+)
+set_warning_levels(dynamic_programming_tests)
+add_test(dynamic_programming dynamic_programming_tests)

@@ -28,5 +28,9 @@ add_library(maximal_subarray INTERFACE)
 target_compile_features(maximal_subarray INTERFACE cxx_std_17)
 target_include_directories(maximal_subarray INTERFACE include/)
 
+add_library(dynamic_programming INTERFACE)
+target_compile_features(dynamic_programming INTERFACE cxx_std_17)
+target_include_directories(dynamic_programming INTERFACE include/)
+
 add_subdirectory(tests)
 add_subdirectory(benchmark)
