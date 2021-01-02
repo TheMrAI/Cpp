@@ -62,27 +62,43 @@ TEST( lcs_memoized_recursive, palindrome )
 
 TEST( lcs_dp_bottom_up, empty_inputs )
 {
-  EXPECT_EQ( lcs_dp_bottom_up( "", "potato" ), 0 );
-  EXPECT_EQ( lcs_dp_bottom_up( "potato", "" ), 0 );
-  EXPECT_EQ( lcs_dp_bottom_up( "", "" ), 0 );
+  EXPECT_EQ( lcs_dp_bottom_up( "", "potato" )[0][6], 0 );
+  EXPECT_EQ( lcs_dp_bottom_up( "potato", "" )[6][0], 0 );
+  EXPECT_EQ( lcs_dp_bottom_up( "", "" )[0][0], 0 );
 }
 
 TEST( lcs_dp_bottom_up, no_common_characters )
 {
-  ASSERT_EQ( lcs_dp_bottom_up( "aaabbbbcccc", "ddddeeeeffff" ), 0 );
+  auto word_a = std::string( "aaabbbbcccc" );
+  auto word_b = std::string( "ddddeeeeffff" );
+  auto result = lcs_dp_bottom_up( word_a, word_b );
+  ASSERT_EQ( result[11][12], 0 );
+  // ASSERT_EQ( get_lcs( word_a, word_b, result ), "" );
 }
 
 TEST( lcs_dp_bottom_up, one_common_character )
 {
-  ASSERT_EQ( lcs_dp_bottom_up( "aaabbbbecccc", "ddddeeeeffff" ), 1 );
+  auto word_a = std::string( "aaabbbbecccc" );
+  auto word_b = std::string( "ddddeeeeffff" );
+  auto result = lcs_dp_bottom_up( word_a, word_b );
+  ASSERT_EQ( result[12][12], 1 );
+  ASSERT_EQ( get_lcs( word_a, word_b, result ), "e" );
 }
 
 TEST( lcs_dp_bottom_up, DNA_example )
 {
-  ASSERT_EQ( lcs_dp_bottom_up( "ACCGGTGGAAACCC", "CCTGGGAAAGTACC" ), 10 );
+  auto word_a = std::string( "ACCGGTGGAAACCC" );
+  auto word_b = std::string( "CCTGGGAAAGTACC" );
+  auto result = lcs_dp_bottom_up( word_a, word_b );
+  ASSERT_EQ( result[14][14], 10 );
+  ASSERT_EQ( get_lcs( word_a, word_b, result ), "CCTGGAAACC" );  // also correct "CCGGGAAACC"
 }
 
 TEST( lcs_dp_bottom_up, palindrome )
 {
-  ASSERT_EQ( lcs_dp_bottom_up( "character", "retcarahc" ), 5 );
+  auto word_a = std::string( "character" );
+  auto word_b = std::string( "retcarahc" );
+  auto result = lcs_dp_bottom_up( word_a, word_b );
+  ASSERT_EQ( result[9][9], 5 );
+  ASSERT_EQ( get_lcs( word_a, word_b, result ), "carac" );
 }
