@@ -43,7 +43,7 @@ auto expogo_dfs( int x, int y ) -> std::string
 
     if ( max_jumps >= checking.current_path.size() )
     {
-      auto current_power = 1 << checking.i_th_power;
+      auto current_power = 1 << checking.i_th_power;  // NOLINT
       auto next_power = checking.i_th_power + 1;
 
       auto west_x = checking.x - current_power;
@@ -63,6 +63,77 @@ auto expogo_dfs( int x, int y ) -> std::string
   return std::string( "IMPOSSIBLE" );
 }
 
+auto expogo_rescaler( int x, int y ) -> std::string
+{
+  auto path = std::string();
+  while ( is_possibile( x, y ) && !( x == 0 && y == 0 ) )
+  {
+    if ( x % 2 != 0 )
+    {
+      auto x_plus = x + 1;
+      if ( x_plus == 0 && y == 0 )
+      {
+        path += 'W';
+        x = x_plus;
+        continue;
+      }
+      auto x_minus = x - 1;
+      if ( x_minus == 0 && y == 0 )
+      {
+        path += 'E';
+        x = x_minus;
+        continue;
+      }
+
+      if ( is_possibile( x_plus / 2, y / 2 ) )  // is the rescalled possible?
+      {
+        x = x_plus;
+        path += 'W';
+      }
+      else
+      {
+        x = x_minus;
+        path += 'E';
+      }
+    }
+    else  // y % 2 != 0
+    {
+      auto y_plus = y + 1;
+      if ( x == 0 && y_plus == 0 )
+      {
+        path += 'S';
+        y = y_plus;
+        continue;
+      }
+      auto y_minus = y - 1;
+      if ( x == 0 && y_minus == 0 )
+      {
+        path += 'N';
+        y = y_minus;
+        continue;
+      }
+      if ( is_possibile( x / 2, y_plus / 2 ) )
+      {
+        y = y_plus;
+        path += 'S';
+      }
+      else
+      {
+        y = y_minus;
+        path += 'N';
+      }
+    }
+    x /= 2;
+    y /= 2;
+  }
+
+  if ( x == 0 && y == 0 )
+  {
+    return path;
+  }
+  return std::string( "IMPOSSIBLE" );
+}
+
 auto main() -> int
 {
   auto test_count = 0;
@@ -72,7 +143,7 @@ auto main() -> int
     auto x = 0;
     auto y = 0;
     std::cin >> x >> y;
-    std::cout << "Case #" << i << ": " << expogo_dfs( x, y ) << std::endl;
+    std::cout << "Case #" << i << ": " << expogo_rescaler( x, y ) << std::endl;
   }
   return 0;
 }
