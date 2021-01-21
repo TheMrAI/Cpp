@@ -3,9 +3,9 @@
 
 // https://codingcompetitions.withgoogle.com/codejam/round/000000000019fef2/00000000002d5b63
 
-// python3 /home/mrai/tinker/Cpp/code_jam/2020/interactive_runner.py python3
-// /home/mrai/tinker/Cpp/code_jam/2020/round_1B/tests/blinfolded_bullseye/testing_tool.py 1 --
-// /home/mrai/tinker/Cpp/build/Debug/code_jam/2020/round_1B/blindfolded_bullseye
+/* 
+python3 /home/mrai/tinker/Cpp/code_jam/2020/interactive_runner.py python3 /home/mrai/tinker/Cpp/code_jam/2020/round_1B tests/blinfolded_bullseye/testing_tool.py 1 -- /home/mrai/tinker/Cpp/build/Debug/code_jam/2020/round_1B/blindfolded_bullseye
+*/
 
 constexpr auto max_size = 1'000'000'000;
 constexpr auto step_size = 1'000'000'000 / 2;
@@ -53,6 +53,7 @@ auto find_center_x( std::istream& in, std::ostream& out, std::pair<int, int> con
 
   auto left_x = -max_size;
   auto left_hit_x = x;
+  auto left_last_x = x;
   while ( left_x < left_hit_x )
   {
     auto middle_x = left_x + ( left_hit_x - left_x ) / 2;
@@ -63,7 +64,8 @@ auto find_center_x( std::istream& in, std::ostream& out, std::pair<int, int> con
 
     if ( result == "HIT" )
     {
-      left_hit_x = middle_x;
+      left_last_x = middle_x;
+      left_hit_x = middle_x - 1;
     }
     else if ( result == "MISS" )
     {
@@ -77,6 +79,7 @@ auto find_center_x( std::istream& in, std::ostream& out, std::pair<int, int> con
 
   auto right_x = max_size;
   auto right_hit_x = x;
+  auto right_last_x = x;
   while ( right_hit_x < right_x )
   {
     auto middle_x = right_hit_x + ( right_x - right_hit_x ) / 2;
@@ -85,7 +88,8 @@ auto find_center_x( std::istream& in, std::ostream& out, std::pair<int, int> con
     in >> result;
     if ( result == "HIT" )
     {
-      right_hit_x = middle_x;
+      right_last_x = middle_x;
+      right_hit_x = middle_x + 1;
     }
     else if ( result == "MISS" )
     {
@@ -97,7 +101,7 @@ auto find_center_x( std::istream& in, std::ostream& out, std::pair<int, int> con
     }
   }
 
-  center_x = left_hit_x + ( right_hit_x - left_hit_x / 2 );
+  center_x = left_last_x + ( right_last_x - left_last_x / 2 );
   return ACTION::HIT;
 }
 
@@ -108,7 +112,7 @@ auto find_center_y( std::istream& in, std::ostream& out, std::pair<int, int> con
 
   auto bottom_y = -max_size;
   auto bottom_hit_y = y;
-
+  auto bottom_last_y = y;
   while ( bottom_y < bottom_hit_y )
   {
     auto middle_y = bottom_y + ( bottom_hit_y - bottom_y ) / 2;
@@ -118,7 +122,8 @@ auto find_center_y( std::istream& in, std::ostream& out, std::pair<int, int> con
     in >> result;
     if ( result == "HIT" )
     {
-      bottom_hit_y = middle_y;
+      bottom_last_y = middle_y;
+      bottom_hit_y = middle_y - 1;
     }
     else if ( result == "MISS" )
     {
@@ -132,7 +137,7 @@ auto find_center_y( std::istream& in, std::ostream& out, std::pair<int, int> con
 
   auto top_y = max_size;
   auto top_hit_y = y;
-  auto top_last_y = 0;
+  auto top_last_y = y;
   while ( top_hit_y < top_y )
   {
     auto middle_y = top_hit_y + ( top_y - top_hit_y ) / 2;
@@ -142,7 +147,7 @@ auto find_center_y( std::istream& in, std::ostream& out, std::pair<int, int> con
     in >> result;
     if ( result == "HIT" )
     {
-      top_last_y = top_hit_y;
+      top_last_y = middle_y;
       top_hit_y = middle_y + 1;
     }
     else if ( result == "MISS" )
@@ -155,7 +160,7 @@ auto find_center_y( std::istream& in, std::ostream& out, std::pair<int, int> con
     }
   }
 
-  center_y = bottom_hit_y + ( top_last_y - bottom_hit_y ) / 2;
+  center_y = bottom_last_y + ( top_last_y - bottom_last_y ) / 2;
   return ACTION::HIT;
 }
 
@@ -199,24 +204,6 @@ auto main() -> int
     }
     std::cerr << "Center candidate: " << center_x << " " << center_y << std::endl;
     auto result = std::string();
-    std::cout << center_x + 1 << " " << center_y << std::endl;
-    std::cin >> result;
-    std::cerr << result << std::endl;
-    std::cout << center_x << " " << center_y + 1 << std::endl;
-    std::cin >> result;
-    std::cerr << result << std::endl;
-    std::cout << center_x + 1 << " " << center_y + 1 << std::endl;
-    std::cin >> result;
-    std::cerr << result << std::endl;
-    std::cout << center_x - 1 << " " << center_y << std::endl;
-    std::cin >> result;
-    std::cerr << result << std::endl;
-    std::cout << center_x << " " << center_y - 1 << std::endl;
-    std::cin >> result;
-    std::cerr << result << std::endl;
-    std::cout << center_x - 1 << " " << center_y - 1 << std::endl;
-    std::cin >> result;
-    std::cerr << result << std::endl;
   }
   return 0;
 }
