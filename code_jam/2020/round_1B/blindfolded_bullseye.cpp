@@ -3,8 +3,10 @@
 
 // https://codingcompetitions.withgoogle.com/codejam/round/000000000019fef2/00000000002d5b63
 
-/* 
-python3 /home/mrai/tinker/Cpp/code_jam/2020/interactive_runner.py python3 /home/mrai/tinker/Cpp/code_jam/2020/round_1B tests/blinfolded_bullseye/testing_tool.py 1 -- /home/mrai/tinker/Cpp/build/Debug/code_jam/2020/round_1B/blindfolded_bullseye
+/*
+python3 /home/mrai/tinker/Cpp/code_jam/2020/interactive_runner.py python3 /home/mrai/tinker/Cpp/code_jam/2020/round_1B
+tests/blinfolded_bullseye/testing_tool.py 1 --
+/home/mrai/tinker/Cpp/build/Debug/code_jam/2020/round_1B/blindfolded_bullseye
 */
 
 constexpr auto max_size = 1'000'000'000;
@@ -101,7 +103,7 @@ auto find_center_x( std::istream& in, std::ostream& out, std::pair<int, int> con
     }
   }
 
-  center_x = left_last_x + ( right_last_x - left_last_x / 2 );
+  center_x = left_last_x + ( right_last_x - left_last_x ) / 2;
   return ACTION::HIT;
 }
 
@@ -168,16 +170,15 @@ auto main() -> int
 {
   auto test_count = 0;
   std::cin >> test_count;
+  std::cerr << test_count;
+  auto A = 0;
+  auto B = 0;
+  std::cin >> A >> B;
   for ( int i = 1; i <= test_count; ++i )
   {
-    auto A = 0;
-    auto B = 0;
-    std::cin >> A >> B;
-
     auto circle_point = std::make_pair( 0, 0 );
-    std::cerr << "Finding circle" << std::endl;
+
     auto find_result = find_circle( std::cin, std::cout, circle_point );
-    std::cerr << "Found: " << circle_point.first << " " << circle_point.second << std::endl;
     if ( find_result == ACTION::CENTER )
     {
       continue;
@@ -188,7 +189,6 @@ auto main() -> int
     }
 
     auto center_x = 0;
-    std::cerr << "Finding center X" << std::endl;
     auto x_result = find_center_x( std::cin, std::cout, circle_point, center_x );
     if ( x_result == ACTION::CENTER )
     {
@@ -196,14 +196,50 @@ auto main() -> int
     }
 
     auto center_y = 0;
-    std::cerr << "Finding center Y" << std::endl;
     auto y_result = find_center_y( std::cin, std::cout, { center_x, circle_point.second }, center_y );
     if ( y_result == ACTION::CENTER )
     {
       continue;
     }
-    std::cerr << "Center candidate: " << center_x << " " << center_y << std::endl;
-    auto result = std::string();
+    std::cout << center_x << " " << center_y << std::endl;
+    auto center_candidate_shot = std::string();
+    std::cin >> center_candidate_shot;
+    if ( center_candidate_shot == "CENTER" )
+    {
+      continue;
+    }
+
+    // shoot in circles to correct for the calculation errors
+    auto offset = 1;
+    auto length = 3;
+    auto center_found = false;
+    while ( !center_found )
+    {
+      auto y_begin = center_y + offset;
+      auto y_last = center_y + offset - length + 1;
+      for ( auto y_tipp = y_begin; y_tipp >= y_last && !center_found; --y_tipp )
+      {
+        auto x_begin = center_x - offset;
+        auto x_last = center_x - offset + length - 1;
+        for ( auto x_tipp = x_begin; x_tipp <= x_last; ++x_tipp )
+        {
+          if ( !( x_tipp == x_begin || x_tipp == x_last || y_tipp == y_begin || y_tipp == y_last ) )
+          {
+            continue;
+          }
+          std::cout << x_tipp << " " << y_tipp << std::endl;
+          auto result = std::string();
+          std::cin >> result;
+          if ( result == "CENTER" )
+          {
+            center_found = true;
+            break;
+          }
+        }
+      }
+      ++offset;
+      length += 2;
+    }
   }
   return 0;
 }
