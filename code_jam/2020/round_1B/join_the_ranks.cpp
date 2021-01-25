@@ -19,11 +19,6 @@ auto reorder_the_deck( int R, int S ) -> std::vector<std::pair<int, int>>
 
   while ( true )
   {
-    /*for ( auto value : value_order )
-    {
-      std::cout << value << " ";
-    }
-    std::cout << std::endl;*/
     auto i = 0;
     auto first_target = value_order[i];
     while ( first_target == value_order[i] )
