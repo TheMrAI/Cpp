@@ -11,3 +11,9 @@ target_compile_features(blindfolded_bullseye PUBLIC
     cxx_std_17
 )
 set_warning_levels(blindfolded_bullseye)
+
+add_executable(join_the_ranks join_the_ranks.cpp)
+target_compile_features(join_the_ranks PUBLIC
+    cxx_std_17
+)
+set_warning_levels(join_the_ranks)
