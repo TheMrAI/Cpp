@@ -40,3 +40,6 @@ add_subdirectory(cpp_lab/object_hierarchies) # lab 2
 # lab 4
 add_subdirectory(cpp_lab/lifetime_and_smart_pointers) # lab 5
 add_subdirectory(cpp_lab/rvalue_references) # lab 6
+
+# Multithreading
+add_subdirectory(multithreading)
