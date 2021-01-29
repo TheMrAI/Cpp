@@ -5,3 +5,5 @@ target_include_directories(modification_order PUBLIC
     include/
 )
 set_warning_levels(modification_order)
+
+add_subdirectory(benchmark)
