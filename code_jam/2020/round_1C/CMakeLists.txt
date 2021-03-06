@@ -11,3 +11,9 @@ target_compile_features(overrandomized PUBLIC
     cxx_std_17
 )
 set_warning_levels(overrandomized)
+
+add_executable(oversized_pancake_choppers oversized_pancake_choppers.cpp)
+target_compile_features(oversized_pancake_choppers PUBLIC
+    cxx_std_17
+)
+set_warning_levels(oversized_pancake_choppers)
