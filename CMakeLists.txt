@@ -24,22 +24,22 @@ add_subdirectory(../googletest ./build/) # googletest
 enable_testing()
 
 #Algorithms
-add_subdirectory(algorithms)
+# add_subdirectory(algorithms)
 
 # Containers
-add_subdirectory(containers/linked_list)
-add_subdirectory(containers/hash_map)
-add_subdirectory(containers/red_black_tree)
-add_subdirectory(containers/trie)
+# add_subdirectory(containers/linked_list)
+# add_subdirectory(containers/hash_map)
+# add_subdirectory(containers/red_black_tree)
+# add_subdirectory(containers/trie)
 
 # cpp_lab
-add_subdirectory(cpp_lab/noisy)
-add_subdirectory(cpp_lab/object_orientation) # lab 1
-add_subdirectory(cpp_lab/object_hierarchies) # lab 2
+# add_subdirectory(cpp_lab/noisy)
+# add_subdirectory(cpp_lab/object_orientation) # lab 1
+# add_subdirectory(cpp_lab/object_hierarchies) # lab 2
 # lab 3
 # lab 4
-add_subdirectory(cpp_lab/lifetime_and_smart_pointers) # lab 5
-add_subdirectory(cpp_lab/rvalue_references) # lab 6
+# add_subdirectory(cpp_lab/lifetime_and_smart_pointers) # lab 5
+# add_subdirectory(cpp_lab/rvalue_references) # lab 6
 
 # Code Jam
 add_subdirectory(code_jam)
