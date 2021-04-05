@@ -35,6 +35,7 @@ auto reversort_engineering( int target_length, int target_cost ) -> std::optiona
     return std::nullopt;
   }
   auto& engineered_sequence = engineered.value();
+
   std::transform( engineered_sequence.begin(), engineered_sequence.end(), engineered_sequence.begin(),
                   []( unsigned value ) {
                     return value + 1;
@@ -46,10 +47,10 @@ auto reversort_engineering( int target_length, int target_cost ) -> std::optiona
 
 auto main() -> int
 {
-  auto test_count = 0;
+  auto test_count = 0U;
   std::cin >> test_count;
 
-  for ( int i = 1; i <= test_count; ++i )
+  for ( auto i = 1U; i <= test_count; ++i )
   {
     auto target_length = static_cast<size_t>( 0 );
     std::cin >> target_length;
@@ -57,22 +58,28 @@ auto main() -> int
     std::cin >> target_cost;
 
     std::cout << "Case #" << i << ": ";
-    auto result = reversort_engineering( target_length, target_cost );
-    if ( result )
+    try
     {
-      auto& data = result.value();
-      for ( unsigned j = 0; j < data.size(); ++j )
+      auto result = reversort_engineering( target_length, target_cost );
+      if ( result )
       {
-        if ( j > 0 )
+        auto& data = result.value();
+        for ( unsigned j = 0; j < data.size(); ++j )
         {
-          std::cout << " ";
+          if ( j > 0 )
+          {
+            std::cout << " ";
+          }
+          std::cout << data[j];
         }
-        std::cout << data[j];
       }
-    }
-    else
+      else
+      {
+        std::cout << "IMPOSSIBLE";
+      }
+    } catch ( std::exception const& exception )
     {
-      std::cout << "IMPOSSIBLE";
+      std::cerr << exception.what() << '\n';
     }
     std::cout << "\n";
   }
