@@ -1,51 +1,47 @@
-#include <iostream>
 #include <algorithm>
-#include <vector>
-#include <optional>
+#include <deque>
+#include <iostream>
 #include <numeric>
+#include <optional>
 
-auto reversort_engineering(size_t target_length, unsigned target_cost) -> std::optional<std::vector<unsigned>>
+auto possible( int target_length, int target_cost ) -> bool
 {
-    auto result = std::optional<std::vector<unsigned>>();
-    auto sequence = std::vector<unsigned>(target_length, 0);
-    std::iota(sequence.begin(), sequence.end(), 1);
+  auto minimum = target_length - 1;
+  auto maximum = ( target_length * ( target_length + 1 ) ) / 2 - 1;
+  return ( target_cost >= minimum ) && ( target_cost <= maximum );
+}
 
-    auto remaining_cost = static_cast<int>(target_cost) - (static_cast<int>(target_length) - 1);
-    if(remaining_cost < 0)
-    {
-        return result;
-    }
-    auto offset = 0;
-    auto max_reverse_length = static_cast<int>(target_length);
-    
-    while(remaining_cost > 0 && max_reverse_length > 0)
-    {
-        auto reverse_length = std::min(remaining_cost + 1, max_reverse_length);
+auto choose_cost( int target_length, int target_cost )
+{
+  // target_length - 1 as the minimum cost for the range, and -1 because we are already using up at least one
+  auto cost_that_needs_to_remain = target_length - 2;
+  return std::min( target_length, target_cost - cost_that_needs_to_remain );
+}
 
-        auto reverse_until = std::prev(sequence.end(), offset);
-        auto reverse_from = std::prev(reverse_until, reverse_length);
-        std::reverse(reverse_from, reverse_until);
-        //std::cout << remaining_cost << " " << reverse_length << std::endl;
-
-        remaining_cost -= reverse_length - 1;
-        ++offset;
-        max_reverse_length -= 2;
-    }
-    
-    auto extra_permutation = static_cast<int>(target_length) - 2;
-    remaining_cost = extra_permutation - remaining_cost + 1;
-    while(remaining_cost > 0)
-    {
-        std::prev_permutation(sequence.begin(), sequence.end());
-        --remaining_cost;
-    }
-
-    if(remaining_cost == 0)
-    {
-        result = sequence;
-    }
-
-    return result;    
+auto reversort_engineering( int target_length, int target_cost ) -> std::optional<std::deque<unsigned>>
+{
+  if ( target_length == 1 )
+  {
+    return std::make_optional( std::deque<unsigned>{ 1 } );
+  }
+  if ( !possible( target_length, target_cost ) )
+  {
+    return std::nullopt;
+  }
+  auto chosen_cost = choose_cost( target_length, target_cost );
+  auto engineered = reversort_engineering( target_length - 1, target_cost - chosen_cost );
+  if ( !engineered )
+  {
+    return std::nullopt;
+  }
+  auto& engineered_sequence = engineered.value();
+  std::transform( engineered_sequence.begin(), engineered_sequence.end(), engineered_sequence.begin(),
+                  []( unsigned value ) {
+                    return value + 1;
+                  } );
+  engineered_sequence.push_front( 1 );
+  std::reverse( engineered_sequence.begin(), std::next( engineered_sequence.begin(), chosen_cost ) );
+  return engineered;
 }
 
 auto main() -> int
@@ -55,28 +51,28 @@ auto main() -> int
 
   for ( int i = 1; i <= test_count; ++i )
   {
-    auto target_length = static_cast<size_t>(0);
+    auto target_length = static_cast<size_t>( 0 );
     std::cin >> target_length;
     auto target_cost = 0U;
     std::cin >> target_cost;
 
     std::cout << "Case #" << i << ": ";
-    auto result = reversort_engineering(target_length, target_cost);
-    if(result)
+    auto result = reversort_engineering( target_length, target_cost );
+    if ( result )
     {
-        auto& data = result.value();
-        for(int j = 0; j < data.size(); ++j)
+      auto& data = result.value();
+      for ( unsigned j = 0; j < data.size(); ++j )
+      {
+        if ( j > 0 )
         {
-            if(j > 0)
-            {
-                std::cout << " ";
-            }
-            std::cout << data[j];
+          std::cout << " ";
         }
+        std::cout << data[j];
+      }
     }
     else
     {
-        std::cout << "IMPOSSIBLE";
+      std::cout << "IMPOSSIBLE";
     }
     std::cout << "\n";
   }
